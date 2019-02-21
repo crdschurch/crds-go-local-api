@@ -149,6 +149,8 @@ publish/
 *.nupkg
 # The packages folder can be ignored because of Package Restore
 **/packages/*
+/packages/
+!packages/repositories.config
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
 # Uncomment if necessary however generally it will be regenerated when needed
@@ -234,5 +236,6 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
 
 wwwroot/js/simplefred.min.js
