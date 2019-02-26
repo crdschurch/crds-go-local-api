@@ -9,7 +9,7 @@ services:
     container_name: crds-go-local-api 
     image: crdschurch/crds-go-local-api:${DOCKER_TAG:-local} 
     ports:
-      - "5000:5050" 
+      - "5000:80" 
     environment: 
       - CRDS_EMBED_ENV=${CRDS_EMBED_ENV:-int} 
       - CRDS_ENV=${CRDS_ENV:-int} 
