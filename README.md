@@ -5,7 +5,7 @@
 <b>Run:</b> You can run the application in Visual Studio on `IIS` or `Kestrel`. Alternatively, you can run it in a container via either of the options below.
 
 Docker:
- - `docker build -t golocalapi -f .\deployment\docker\Dockerfile . --no-cache`
+ - `docker build -t golocalapi -f ./deployment/docker/Dockerfile . --no-cache`
  - `docker run -p 8080:80 golocalapi`
 
 Docker-compose:
