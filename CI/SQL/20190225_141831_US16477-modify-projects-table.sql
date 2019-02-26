@@ -1,8 +1,8 @@
 USE [MinistryPlatform]
 GO
 
---SELECT * INTO temp_cr_Projects
---FROM cr_Projects
+SELECT * INTO temp_cr_Projects
+FROM cr_Projects
 
 ALTER TABLE [dbo].[cr_Projects] DROP CONSTRAINT [FK_Projects_Project_Types]
 GO
@@ -157,5 +157,5 @@ GO
 ALTER TABLE [dbo].[cr_Group_Connectors] CHECK CONSTRAINT [FK_GroupConnector_Project]
 GO
 
---DROP TABLE [dbo].[temp_cr_Projects]
---GO
+DROP TABLE [dbo].[temp_cr_Projects]
+GO
