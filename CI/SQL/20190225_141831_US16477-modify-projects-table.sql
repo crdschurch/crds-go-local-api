@@ -1,8 +1,8 @@
 USE [MinistryPlatform]
 GO
 
-SELECT * INTO temp_cr_Projects
-FROM cr_Projects
+--SELECT * INTO temp_cr_Projects
+--FROM cr_Projects
 
 ALTER TABLE [dbo].[cr_Projects] DROP CONSTRAINT [FK_Projects_Project_Types]
 GO
@@ -25,6 +25,9 @@ GO
 ALTER TABLE [dbo].[cr_Projects] DROP CONSTRAINT [FK_Projects_Addresses]
 GO
 
+ALTER TABLE [dbo].[cr_Group_Connectors] DROP CONSTRAINT [FK_GroupConnector_Project]
+GO
+
 /****** Object:  Table [dbo].[cr_Projects]    Script Date: 2/25/2019 12:33:58 PM ******/
 DROP TABLE [dbo].[cr_Projects]
 GO
@@ -38,24 +41,26 @@ GO
 
 CREATE TABLE [dbo].[cr_Projects](
 	[Project_ID] [int] IDENTITY(1,1) NOT NULL,
-	[Project_Name] [nvarchar](100) NOT NULL,
+	[Initiative_ID] [int] NOT NULL,
 	[Project_Status_ID] [int] NOT NULL,
 	[Location_ID] [int] NOT NULL,
-	[Project_Type_ID] [int] NOT NULL,
 	[Organization_ID] [int] NOT NULL,
-	[Initiative_ID] [int] NOT NULL,
+	[Project_Name] [nvarchar](100) NOT NULL,
+	[Address_ID] [int] NULL,
+	[Project_Type_ID] [int] NOT NULL,
+	[Project_Description] [nvarchar](500) NULL,
+	[Start_Date] [datetime] NULL,
+	[End_Date] [datetime] NULL,
+	[_Volunteer_Count]  AS ([dbo].[crds_GoVolunteerProjectMemberCount]([Project_ID])),
 	[Minimum_Volunteers] [int] NOT NULL,
 	[Maximum_Volunteers] [int] NOT NULL,
-	[Absolute_Maximum_Volunteers] [int] NOT NULL,
-	[Domain_ID] [int] NOT NULL,
-	[_Volunteer_Count]  AS ([dbo].[crds_GoVolunteerProjectMemberCount]([Project_ID])),
-	[Check_In_Floor] [nvarchar](50) NULL,
-	[Check_In_Area] [nvarchar](50) NULL,
-	[Check_In_Room_Number] [nvarchar](50) NULL,
+	[Minimum_Age_Exception] [int] NULL,
+	[Project_Parking_Location] [nvarchar](500) NULL,
 	[Note_To_Volunteers_1] [nvarchar](500) NULL,
 	[Note_To_Volunteers_2] [nvarchar](500) NULL,
-	[Project_Parking_Location] [nvarchar](500) NULL,
-	[Address_ID] [int] NULL,
+	[Group_ID] [int] NULL,
+	[Domain_ID] [int] NOT NULL
+
  CONSTRAINT [PK_Projects] PRIMARY KEY CLUSTERED 
 (
 	[Project_ID] ASC
@@ -112,6 +117,7 @@ GO
 ALTER TABLE [dbo].[cr_Projects] CHECK CONSTRAINT [FK_Projects_Project_Types]
 GO
 
+SET IDENTITY_INSERT cr_Projects ON
 INSERT INTO cr_Projects ([Project_ID],
 	[Project_Name],
 	[Project_Status_ID],
@@ -121,11 +127,7 @@ INSERT INTO cr_Projects ([Project_ID],
 	[Initiative_ID],
 	[Minimum_Volunteers],
 	[Maximum_Volunteers],
-	[Absolute_Maximum_Volunteers],
 	[Domain_ID],
-	[Check_In_Floor],
-	[Check_In_Area],
-	[Check_In_Room_Number],
 	[Note_To_Volunteers_1],
 	[Note_To_Volunteers_2],
 	[Project_Parking_Location],
@@ -139,17 +141,21 @@ SELECT [Project_ID],
 	[Initiative_ID],
 	[Minimum_Volunteers],
 	[Maximum_Volunteers],
-	[Absolute_Maximum_Volunteers],
 	[Domain_ID],
-	[Check_In_Floor],
-	[Check_In_Area],
-	[Check_In_Room_Number],
 	[Note_To_Volunteers_1],
 	[Note_To_Volunteers_2],
 	[Project_Parking_Location],
 	[Address_ID]
 FROM temp_cr_Projects
+SET IDENTITY_INSERT cr_Projects OFF
 GO
 
-DROP TABLE [dbo].[temp_cr_Projects]
+ALTER TABLE [dbo].[cr_Group_Connectors]  WITH CHECK ADD  CONSTRAINT [FK_GroupConnector_Project] FOREIGN KEY([Project_ID])
+REFERENCES [dbo].[cr_Projects] ([Project_ID])
 GO
+
+ALTER TABLE [dbo].[cr_Group_Connectors] CHECK CONSTRAINT [FK_GroupConnector_Project]
+GO
+
+--DROP TABLE [dbo].[temp_cr_Projects]
+--GO
