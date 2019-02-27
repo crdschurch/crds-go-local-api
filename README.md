@@ -13,4 +13,5 @@ Docker-compose:
  - `docker-compose -f deployment/docker/docker-compose.yml up`  
 
 <b>Swagger</b>: https://localhost:44305/swagger/index.html
+
 <b>Int endpoint</b>: https://api-int.crossroads.net/golocal/api/health/status
