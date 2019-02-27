@@ -1,6 +1,6 @@
 <h3>GOLocal API</h3>
 
-<b>Summary:</b> This is a `.NET Core 2.1` backend for the GOLocal application.
+<b>Summary:</b> This is a `.NET Core 2.1` backend for the GOLocal application. It is a REST API which does not serve any views.
 
 <b>Run:</b> You can run the application in Visual Studio on `IIS` or `Kestrel`. Alternatively, you can run it in a container via either of the options below.
 
