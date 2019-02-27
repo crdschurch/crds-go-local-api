@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1 
 kind: Deployment 
 metadata: 
-  name: golocalapi 
+  name: crds-go-local-api 
 spec: 
   replicas: 2 
   strategy: 
@@ -12,18 +12,18 @@ spec:
   template: 
     metadata: 
       labels: 
-        app: golocalapi 
+        app: crds-go-local-api 
     spec:
       containers: 
-        - name: golocalapi 
+        - name: crds-go-local-api 
           image: crdschurch/crds-go-local-api:$DOCKER_TAG 
           imagePullPolicy: Always 
           ports: 
-            - containerPort: 5050 
+            - containerPort: 80 
           readinessProbe:
             httpGet:
               path: /api/health/status
-              port: 5050
+              port: 80
             initialDelaySeconds: 3
             timeoutSeconds: 3
             successThreshold: 1
@@ -31,7 +31,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /api/health/status
-              port: 5050
+              port: 80
             initialDelaySeconds: 10
             timeoutSeconds: 3
             successThreshold: 1
