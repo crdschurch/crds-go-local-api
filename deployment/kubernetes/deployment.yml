@@ -1,0 +1,70 @@
+apiVersion: extensions/v1beta1 
+kind: Deployment 
+metadata: 
+  name: crds-go-local-api 
+spec: 
+  replicas: 2 
+  strategy: 
+    type: RollingUpdate 
+    rollingUpdate: 
+      maxSurge: 2 
+      maxUnavailable: 0 
+  template: 
+    metadata: 
+      labels: 
+        app: crds-go-local-api 
+    spec:
+      containers: 
+        - name: crds-go-local-api 
+          image: crdschurch/crds-go-local-api:$DOCKER_TAG 
+          imagePullPolicy: Always 
+          ports: 
+            - containerPort: 80 
+          readinessProbe:
+            httpGet:
+              path: /api/health/status
+              port: 80
+            initialDelaySeconds: 3
+            timeoutSeconds: 3
+            successThreshold: 1
+            periodSeconds: 3
+          livenessProbe:
+            httpGet:
+              path: /api/health/status
+              port: 80
+            initialDelaySeconds: 10
+            timeoutSeconds: 3
+            successThreshold: 1
+            periodSeconds: 10
+          resources: 
+            limits: 
+              memory: "512Mi" 
+              cpu: "700m" 
+            requests: 
+              memory: "16Mi" 
+              cpu: "100m" 
+          env: 
+            - name: CRDS_EMBED_ENV 
+              value: $CRDS_EMBED_ENV 
+            - name: CRDS_WEB 
+              value: $CRDS_WEB 
+            - name: CRDS_FORMIO_API_ENDPOINT 
+              value: $CRDS_FORMIO_API_ENDPOINT 
+            - name: CRDS_FORMIO_API_TOKEN 
+              value: $CRDS_FORMIO_API_TOKEN 
+            - name: CRDS_MP_COMMON_CLIENT_ID 
+              value: $CRDS_MP_COMMON_CLIENT_ID 
+            - name: CRDS_MP_COMMON_CLIENT_SECRET 
+              value: $CRDS_MP_COMMON_CLIENT_SECRET 
+            - name: MP_REST_API_ENDPOINT 
+              value: $MP_REST_API_ENDPOINT 
+            - name: MP_OAUTH_BASE_URL 
+              value: $MP_OAUTH_BASE_URL 
+            - name: API_USER 
+              value: $API_USER 
+            - name: API_PASSWORD 
+              value: $API_PASSWORD 
+            - name: ASTRONOMER_APPLICATION_ID 
+              value: $ASTRONOMER_APPLICATION_ID
+            - name: FRED_PATH_BASE
+              value: $FRED_PATH_BASE
