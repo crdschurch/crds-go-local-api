@@ -11,3 +11,5 @@ Docker:
 Docker-compose:
  - `docker-compose -f deployment/docker/docker-compose.yml build --no-cache`
  - `docker-compose -f deployment/docker/docker-compose.yml up`  
+
+<b>Swagger</b>: https://localhost:44305/swagger/index.html
