@@ -8,7 +8,7 @@ namespace CrdsGoLocalApi.Services
   {
     public class SettingsService : ISettingsService
     {
-      private static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
+      private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
       private Dictionary<string, string> appSettings;
 
@@ -52,7 +52,7 @@ namespace CrdsGoLocalApi.Services
         }
         catch (Exception ex)
         {
-          _logger.Error(ex, "Error Getting Environment Variables");
+          Logger.Error(ex, "Error Getting Environment Variables");
         }
 
         return envSettings;
