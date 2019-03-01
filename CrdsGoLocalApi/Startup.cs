@@ -24,7 +24,7 @@ namespace CrdsGoLocalApi
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
       services.AddSwaggerGen(c => {
-        c.SwaggerDoc("v1", new Info { Title = "GO Local API", Version = "v1" });
+        c.SwaggerDoc("v1", new Info {Title = "GO Local API", Version = "v1"});
       });
 
       services.AddSingleton<ISettingsService, SettingsService>();
@@ -43,9 +43,18 @@ namespace CrdsGoLocalApi
       }
 
       app.UseSwagger();
-      app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "GO Local API v1");
-      });
+      if (env.IsDevelopment())
+      {
+        app.UseSwaggerUI(c => {
+          c.SwaggerEndpoint("/swagger/v1/swagger.json", "GO Local API v1");
+        });
+      }
+      else
+      {
+        app.UseSwaggerUI(c => {
+          c.SwaggerEndpoint("/golocal/swagger/v1/swagger.json", "GO Local API v1");
+        });
+      }
 
       app.UseHttpsRedirection();
       app.UseMvc();
