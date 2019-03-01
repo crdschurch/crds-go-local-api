@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace CrdsGoLocalApi.Services
 {
@@ -19,27 +16,23 @@ namespace CrdsGoLocalApi.Services
       {
         appSettings = new Dictionary<string, string>();
         var envVarSettings = GetSettingsFromEnvironmentVariables();
-        AddSettings(envVarSettings, "Environment Variables");
+        AddSettings(envVarSettings);
       }
 
       public string GetValue(string key)
       {
-
         if (appSettings.TryGetValue(key, out string value))
         {
           return value;
         }
-        else
-        {
-          return null;
-        }
+        return null;
       }
 
-      private void AddSettings(Dictionary<string, string> settings, string source)
+      private void AddSettings(Dictionary<string, string> settings)
       {
         foreach (var setting in settings)
         {
-          var success = appSettings.TryAdd(setting.Key, setting.Value);
+          appSettings.TryAdd(setting.Key, setting.Value);
         }
       }
 
@@ -59,7 +52,7 @@ namespace CrdsGoLocalApi.Services
         }
         catch (Exception ex)
         {
-          var foo = ex;
+          _logger.Error(ex, "Error Getting Environment Variables");
         }
 
         return envSettings;
