@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace CrdsGoLocalApi.Services
+namespace CrdsGoLocalApi.Services.Settings
 {
   namespace Services
   {
