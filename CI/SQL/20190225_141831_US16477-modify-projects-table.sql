@@ -117,6 +117,13 @@ GO
 ALTER TABLE [dbo].[cr_Projects] CHECK CONSTRAINT [FK_Projects_Project_Types]
 GO
 
+ALTER TABLE [dbo].[cr_Projects]  WITH CHECK ADD  CONSTRAINT [FK_Projects_Groups] FOREIGN KEY([Group_ID])
+REFERENCES [dbo].[Groups] ([Group_ID])
+GO
+
+ALTER TABLE [dbo].[cr_Projects] CHECK CONSTRAINT [FK_Projects_Project_Types]
+GO
+
 SET IDENTITY_INSERT cr_Projects ON
 INSERT INTO cr_Projects ([Project_ID],
 	[Project_Name],
