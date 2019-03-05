@@ -48,10 +48,6 @@ spec:
               value: $CRDS_EMBED_ENV 
             - name: CRDS_WEB 
               value: $CRDS_WEB 
-            - name: CRDS_FORMIO_API_ENDPOINT 
-              value: $CRDS_FORMIO_API_ENDPOINT 
-            - name: CRDS_FORMIO_API_TOKEN 
-              value: $CRDS_FORMIO_API_TOKEN 
             - name: CRDS_MP_COMMON_CLIENT_ID 
               value: $CRDS_MP_COMMON_CLIENT_ID 
             - name: CRDS_MP_COMMON_CLIENT_SECRET 
@@ -66,5 +62,3 @@ spec:
               value: $API_PASSWORD 
             - name: ASTRONOMER_APPLICATION_ID 
               value: $ASTRONOMER_APPLICATION_ID
-            - name: FRED_PATH_BASE
-              value: $FRED_PATH_BASE

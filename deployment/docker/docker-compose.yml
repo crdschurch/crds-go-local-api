@@ -14,7 +14,6 @@ services:
       - CRDS_EMBED_ENV=${CRDS_EMBED_ENV:-int} 
       - CRDS_ENV=${CRDS_ENV:-int} 
       - CRDS_WEB=${CRDS_WEB:-https://int.crossroads.net} 
-      - CRDS_FORMIO_API_ENDPOINT=${CRDS_FORMIO_API_ENDPOINT:-https://int-crds.form.io} 
       - CRDS_MP_COMMON_CLIENT_ID=${CRDS_MP_COMMON_CLIENT_ID}
       - CRDS_MP_COMMON_CLIENT_SECRET=${CRDS_MP_COMMON_CLIENT_SECRET} 
       - MP_REST_API_ENDPOINT=${MP_REST_API_ENDPOINT:-https://adminint.crossroads.net/ministryplatformapi} 
@@ -22,4 +21,3 @@ services:
       - API_USER=${API_USER}
       - API_PASSWORD=${API_PASSWORD}
       - ASTRONOMER_APPLICATION_ID=${ASTRONOMER_APPLICATION_ID}
-      - FRED_PATH_BASE=${FRED_PATH_BASE}

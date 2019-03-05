@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CrdsGoLocalApi.Services;
+﻿using CrdsGoLocalApi.Services;
 using CrdsGoLocalApi.Services.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace CrdsGoLocalApi
@@ -31,7 +24,7 @@ namespace CrdsGoLocalApi
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
       services.AddSwaggerGen(c => {
-        c.SwaggerDoc("v1", new Info { Title = "My API", Version = "v1" });
+        c.SwaggerDoc("v1", new Info {Title = "GO Local API", Version = "v1"});
       });
 
       services.AddSingleton<ISettingsService, SettingsService>();
@@ -50,9 +43,18 @@ namespace CrdsGoLocalApi
       }
 
       app.UseSwagger();
-      app.UseSwaggerUI(c => {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-      });
+      if (env.IsDevelopment())
+      {
+        app.UseSwaggerUI(c => {
+          c.SwaggerEndpoint("/swagger/v1/swagger.json", "GO Local API v1");
+        });
+      }
+      else
+      {
+        app.UseSwaggerUI(c => {
+          c.SwaggerEndpoint("/golocal/swagger/v1/swagger.json", "GO Local API v1");
+        });
+      }
 
       app.UseHttpsRedirection();
       app.UseMvc();
