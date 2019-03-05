@@ -9,7 +9,7 @@ namespace CrdsGoLocalApi.Models
     public int Id { get; set; }
 
     [JsonProperty(PropertyName = "orgName")]
-    public string OranizationName { get; set; }
+    public string OrganizationName { get; set; }
     
     [JsonProperty(PropertyName = "name")]
     public string ProjectName { get; set; }
