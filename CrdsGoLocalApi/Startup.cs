@@ -1,4 +1,5 @@
-﻿using CrdsGoLocalApi.Services.Cache;
+﻿using CrdsGoLocalApi.Repositories.ProjectData;
+using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
 using CrdsGoLocalApi.Services.Settings;
 using CrdsGoLocalApi.Services.Settings.Services;
@@ -37,6 +38,7 @@ namespace CrdsGoLocalApi
       services.AddSingleton<IProjectService, ProjectService>();
       services.AddSingleton<ITokenService, TokenService>();
       services.AddSingleton<ICacheService, CacheService>();
+      services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
