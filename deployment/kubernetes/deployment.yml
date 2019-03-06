@@ -62,3 +62,5 @@ spec:
               value: $API_PASSWORD 
             - name: ASTRONOMER_APPLICATION_ID 
               value: $ASTRONOMER_APPLICATION_ID
+            - name: NEW_RELIC_DISTRIBUTED_TRACING_ENABLED
+              value: $NEW_RELIC_DISTRIBUTED_TRACING_ENABLED
