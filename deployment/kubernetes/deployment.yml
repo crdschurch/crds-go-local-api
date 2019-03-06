@@ -64,3 +64,7 @@ spec:
               value: $ASTRONOMER_APPLICATION_ID
             - name: NEW_RELIC_DISTRIBUTED_TRACING_ENABLED
               value: $NEW_RELIC_DISTRIBUTED_TRACING_ENABLED
+            - name: NEW_RELIC_LICENSE_KEY            
+              value: $NR_INSTALL_KEY
+            - name: NEW_RELIC_APP_NAME
+              value: $NR_APP_NAME
