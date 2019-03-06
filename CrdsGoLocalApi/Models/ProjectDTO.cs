@@ -26,6 +26,9 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "numberNeeded")]
     public int VolunteersNeeded { get; set; }
 
+    [JsonProperty(PropertyName = "spots")]
+    public int SpotsLeft { get; set; }
+
     [JsonProperty(PropertyName = "captainName")]
     public string CaptainName { get; set; }
     
