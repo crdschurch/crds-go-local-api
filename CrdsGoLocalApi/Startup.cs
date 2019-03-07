@@ -90,6 +90,7 @@ namespace CrdsGoLocalApi
         app.UseSwaggerUI(c =>
         {
           c.SwaggerEndpoint("/golocal/swagger/v1/swagger.json", "GO Local API v1");
+          c.RoutePrefix = "golocal";
         });
       }
 
