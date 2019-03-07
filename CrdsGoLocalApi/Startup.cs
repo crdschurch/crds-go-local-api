@@ -27,9 +27,11 @@ namespace CrdsGoLocalApi
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+      services.AddCors();
 
-      services.AddSwaggerGen(c => {
-        c.SwaggerDoc("v1", new Info {Title = "GO Local API", Version = "v1"});
+      services.AddSwaggerGen(c =>
+      {
+        c.SwaggerDoc("v1", new Info { Title = "GO Local API", Version = "v1" });
       });
 
       //Dependency Injection
@@ -47,22 +49,46 @@ namespace CrdsGoLocalApi
       if (env.IsDevelopment())
       {
         app.UseDeveloperExceptionPage();
+        app.UseCors(cor =>
+        {
+          cor.AllowAnyHeader();
+          cor.AllowAnyMethod();
+          cor.AllowCredentials();
+          cor.AllowAnyOrigin();
+        });
       }
       else
       {
         app.UseHsts();
+        app.UseCors(cor =>
+        {
+          cor.AllowAnyHeader();
+          cor.AllowAnyMethod();
+          cor.AllowCredentials();
+          cor.WithOrigins(new string[]
+            { "http://local.crossroads.net:5050",
+              "http://local.crossroads.net:4200",
+              "https://golocal-int.crossroads.net",
+              "https://golocal-demo.crossroads.net",
+              "https://golocal.crossroads.net",
+              "https://crossroads.net",
+              "https://www.crossroads.net"
+          });
+        });
       }
 
       app.UseSwagger();
       if (env.IsDevelopment())
       {
-        app.UseSwaggerUI(c => {
+        app.UseSwaggerUI(c =>
+        {
           c.SwaggerEndpoint("/swagger/v1/swagger.json", "GO Local API v1");
         });
       }
       else
       {
-        app.UseSwaggerUI(c => {
+        app.UseSwaggerUI(c =>
+        {
           c.SwaggerEndpoint("/golocal/swagger/v1/swagger.json", "GO Local API v1");
         });
       }
