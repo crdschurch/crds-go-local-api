@@ -19,7 +19,7 @@ namespace CrdsGoLocalApi.Tests.Helpers
           OrgName = "Test Org",
           ProjectType = "Gardening",
           ProjectTypeMinAge = 2,
-          ProjectAgeException = null,
+          ProjectAgeException = 18,
           CrdsSite = "Oakley",
           MinVols = 10,
           MaxVols = 20,
@@ -64,12 +64,41 @@ namespace CrdsGoLocalApi.Tests.Helpers
 
     public static List<GroupCount> MockProjectVolCounts()
     {
-      return new List<GroupCount>();
+      return new List<GroupCount>
+      {
+        new GroupCount
+        {
+          GroupId = 1234,
+          ParticipantCount = 5
+        },
+        new GroupCount
+        {
+          GroupId = 5678,
+          ParticipantCount = 15
+        }
+      };
     }
 
     public static List<ProjectLeaders> MockProjectLeaders()
     {
-      return new List<ProjectLeaders>();
+      return new List<ProjectLeaders>
+      {
+        new ProjectLeaders
+        {
+          GroupId = 1234,
+          GroupLeader = "Leader One"
+        },
+        new ProjectLeaders
+        {
+          GroupId = 1234,
+          GroupLeader = "Leader Two"
+        },
+        new ProjectLeaders
+        {
+          GroupId = 5678,
+          GroupLeader = "Tester McTesterson"
+        }
+      };
     }
   }
 }
