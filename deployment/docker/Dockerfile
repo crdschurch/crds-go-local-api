@@ -16,6 +16,9 @@ WORKDIR /app
 
 WORKDIR /app/CrdsGoLocalApi
 
+# Run Unit Tests
+RUN dotnet test CrdsGoLocalApi.Tests/CrdsGoLocalApi.Tests.csproj
+
 # Publish build to out directory 
 RUN dotnet publish -c Release -o out
 
