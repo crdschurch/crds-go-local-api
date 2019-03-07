@@ -82,9 +82,9 @@ namespace CrdsGoLocalApi
         });
       }
 
-      app.UseSwagger();
       if (env.IsDevelopment())
       {
+        app.UseSwagger();
         app.UseSwaggerUI(c =>
         {
           c.SwaggerEndpoint("/swagger/v1/swagger.json", "GO Local API v1");
@@ -92,10 +92,14 @@ namespace CrdsGoLocalApi
       }
       else
       {
+        app.UseSwagger(c =>
+        {
+          c.RouteTemplate = "golocal/swagger/{documentName}/swagger.json";
+        });
         app.UseSwaggerUI(c =>
         {
-          c.SwaggerEndpoint("/golocal/swagger/v1/swagger.json", "GO Local API v1");
           c.RoutePrefix = "golocal";
+          c.SwaggerEndpoint("/swagger/v1/swagger.json", "GO Local API v1");
         });
       }
 
