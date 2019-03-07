@@ -14,6 +14,7 @@ namespace CrdsGoLocalApi.Controllers
         _projectService = projectService;
       }
 
+      // GET /api/search/projects
       [HttpGet]
       [Route("projects")]
       public IActionResult GetProjects()
