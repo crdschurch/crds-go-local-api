@@ -66,8 +66,13 @@ namespace CrdsGoLocalApi
           cor.AllowAnyMethod();
           cor.AllowCredentials();
           cor.WithOrigins(new string[]
-            { "http://local.crossroads.net:5050",
+            { "http://localhost:5050",
+              "http://localhost:4200",
+              "http://local.crossroads.net:5050",
               "http://local.crossroads.net:4200",
+              "https://www.golocal-int.crossroads.net",
+              "https://www.golocal-demo.crossroads.net",
+              "https://www.golocal.crossroads.net",
               "https://golocal-int.crossroads.net",
               "https://golocal-demo.crossroads.net",
               "https://golocal.crossroads.net",
