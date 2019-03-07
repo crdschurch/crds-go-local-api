@@ -14,10 +14,10 @@ ARG CRDS_EMBED_ENV
 # Change work directory back to /app - root of proj 
 WORKDIR /app
 
-WORKDIR /app/CrdsGoLocalApi
-
 # Run Unit Tests
 RUN dotnet test CrdsGoLocalApi.Tests/CrdsGoLocalApi.Tests.csproj
+
+WORKDIR /app/CrdsGoLocalApi
 
 # Publish build to out directory 
 RUN dotnet publish -c Release -o out
