@@ -27,11 +27,7 @@ namespace CrdsGoLocalApi
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-      services.AddCors(options => {
-        options.AddPolicy("AllowSubdomain", builder => {
-            builder.SetIsOriginAllowedToAllowWildcardSubdomains();
-        });
-      });
+      services.AddCors();
 
       services.AddSwaggerGen(c =>
       {
@@ -66,6 +62,7 @@ namespace CrdsGoLocalApi
         app.UseHsts();
         app.UseCors(cor =>
         {
+          cor.SetIsOriginAllowedToAllowWildcardSubdomains();
           cor.AllowAnyHeader();
           cor.AllowAnyMethod();
           cor.AllowCredentials();
