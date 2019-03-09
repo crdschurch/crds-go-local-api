@@ -20,7 +20,7 @@
     "CrdsGoLocalApi": {
       "commandName": "Project",
       "launchBrowser": true,
-      "launchUrl": "api/health/status",
+      "launchUrl": "swagger/index.html",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },

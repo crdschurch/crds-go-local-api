@@ -1,4 +1,4 @@
-﻿namespace CrdsGoLocalApi.Services
+﻿namespace CrdsGoLocalApi.Services.Settings
 {
   public interface ISettingsService
   {
