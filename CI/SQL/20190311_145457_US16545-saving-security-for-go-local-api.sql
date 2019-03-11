@@ -20,3 +20,16 @@ BEGIN
            ,@ContactsPageId
            ,1)
 END
+
+DECLARE @ParticipantsPageId int = 355
+IF NOT EXISTS (SELECT 1 FROM dp_Role_Pages WHERE Role_ID = @GoLocalRoleId AND Page_ID = @ParticipantsPageId)
+BEGIN 
+	INSERT INTO [dbo].[dp_Role_Pages]
+           ([Role_ID]
+           ,[Page_ID]
+           ,[Access_Level])
+     VALUES
+           (@GoLocalRoleId
+           ,@ParticipantsPageId
+           ,1)
+END

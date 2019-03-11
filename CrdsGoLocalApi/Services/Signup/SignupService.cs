@@ -3,6 +3,7 @@ using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
+using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
 
 namespace CrdsGoLocalApi.Services.Signup
@@ -11,12 +12,14 @@ namespace CrdsGoLocalApi.Services.Signup
   {
     private readonly IContactDataRepository _contactDataRepository;
     private readonly IHouseholdDataRepository _householdDataRepository;
+    private readonly IParticipantDataRepository _participantDataRepository;
     private readonly IProjectDataRepository _projectDataRepository;
 
-    public SignupService(IContactDataRepository contactData, IProjectDataRepository projectData, IHouseholdDataRepository householdData)
+    public SignupService(IContactDataRepository contactData, IHouseholdDataRepository householdData, IParticipantDataRepository participantData, IProjectDataRepository projectData)
     {
       _contactDataRepository = contactData;
       _householdDataRepository = householdData;
+      _participantDataRepository = participantData;
       _projectDataRepository = projectData;
     }
 
@@ -70,10 +73,10 @@ namespace CrdsGoLocalApi.Services.Signup
       {
         ContactId = contactId,
         ParticipantStartDate = DateTime.Now,
-        ParticipantType = MpConstants.TempParticipantTypeId
+        ParticipantTypeId = MpConstants.TempParticipantTypeId
       };
 
-      // TODO: Create Participant Record
+      participant.ParticipantId = _participantDataRepository.CreateParticipant(participant);
 
       return participant.ParticipantId;
     }

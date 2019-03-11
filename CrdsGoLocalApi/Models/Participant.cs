@@ -10,8 +10,8 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "Contact_ID")]
     public int ContactId { get; set; }
 
-    [JsonProperty(PropertyName = "Participant_Type")]
-    public int ParticipantType { get; set; }
+    [JsonProperty(PropertyName = "Participant_Type_ID")]
+    public int ParticipantTypeId { get; set; }
 
     [JsonProperty(PropertyName = "Participant_ID")]
     public int ParticipantId { get; set; }

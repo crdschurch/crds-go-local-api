@@ -1,5 +1,6 @@
 ﻿using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
+using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
 using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
@@ -42,6 +43,7 @@ namespace CrdsGoLocalApi
       services.AddSingleton<ICacheService, CacheService>();
       services.AddSingleton<IContactDataRepository, ContactDataRepository>();
       services.AddSingleton<IHouseholdDataRepository, HouseholdDataRepository>();
+      services.AddSingleton<IParticipantDataRepository, ParticipantDataRepository>();
       services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();
       services.AddSingleton<IProjectService, ProjectService>();
       services.AddSingleton<ISettingsService, SettingsService>();
