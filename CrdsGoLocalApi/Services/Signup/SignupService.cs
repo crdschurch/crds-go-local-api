@@ -1,6 +1,7 @@
 ﻿using System;
 using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
+using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ProjectData;
 
 namespace CrdsGoLocalApi.Services.Signup
@@ -8,10 +9,12 @@ namespace CrdsGoLocalApi.Services.Signup
   public class SignupService : ISignupService
   {
     private readonly IProjectDataRepository _projectDataRepository;
+    private readonly IHouseholdDataRepository _householdDataRepository;
 
-    public SignupService(IProjectDataRepository projectData)
+    public SignupService(IProjectDataRepository projectData, IHouseholdDataRepository householdData)
     {
       _projectDataRepository = projectData;
+      _householdDataRepository = householdData;
     }
 
     public bool SignupUser(VolunteerDTO signupData)
@@ -34,7 +37,7 @@ namespace CrdsGoLocalApi.Services.Signup
     {
       var household = new Household{ HouseholdName = householdName };
 
-      // TODO: Create Household Record
+      household.HouseholdId = _householdDataRepository.CreateHousehold(household);
 
       return household.HouseholdId;
     }

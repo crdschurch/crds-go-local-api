@@ -1,4 +1,5 @@
-﻿using CrdsGoLocalApi.Repositories.ProjectData;
+﻿using CrdsGoLocalApi.Repositories.HouseholdData;
+using CrdsGoLocalApi.Repositories.ProjectData;
 using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
 using CrdsGoLocalApi.Services.Settings;
@@ -38,6 +39,7 @@ namespace CrdsGoLocalApi
       //Dependency Injection
       CrossroadsWebCommonConfig.Register(services);
       services.AddSingleton<ICacheService, CacheService>();
+      services.AddSingleton<IHouseholdDataRepository, HouseholdDataRepository>();
       services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();
       services.AddSingleton<IProjectService, ProjectService>();
       services.AddSingleton<ISettingsService, SettingsService>();
