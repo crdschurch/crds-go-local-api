@@ -10,6 +10,9 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "Contact_ID")]
     public int ContactId { get; set; }
 
+    [JsonProperty(PropertyName = "Company")]
+    public bool Company { get; set; }
+
     [JsonProperty(PropertyName = "Email_Address")]
     public string EmailAddress { get; set; }
 
@@ -19,13 +22,16 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "Last_Name")]
     public string LastName { get; set; }
 
-    [JsonProperty(PropertyName = "Nickname")]
-    public string Nickname { get; set; }
+    [JsonProperty(PropertyName = "Display_Name")]
+    public string DisplayName { get; set; }
 
     [JsonProperty(PropertyName = "Date_of_Birth")]
     public DateTime DateOfBirth { get; set; }
 
     [JsonProperty(PropertyName = "Household_ID")]
     public int HouseholdId { get; set; }
+
+    [JsonProperty(PropertyName = "Contact_Status")]
+    public int ContactStatusId { get; set; }
   }
 }

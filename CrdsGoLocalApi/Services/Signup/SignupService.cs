@@ -1,6 +1,7 @@
 ﻿using System;
 using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
+using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ProjectData;
 
@@ -8,13 +9,15 @@ namespace CrdsGoLocalApi.Services.Signup
 {
   public class SignupService : ISignupService
   {
-    private readonly IProjectDataRepository _projectDataRepository;
+    private readonly IContactDataRepository _contactDataRepository;
     private readonly IHouseholdDataRepository _householdDataRepository;
+    private readonly IProjectDataRepository _projectDataRepository;
 
-    public SignupService(IProjectDataRepository projectData, IHouseholdDataRepository householdData)
+    public SignupService(IContactDataRepository contactData, IProjectDataRepository projectData, IHouseholdDataRepository householdData)
     {
-      _projectDataRepository = projectData;
+      _contactDataRepository = contactData;
       _householdDataRepository = householdData;
+      _projectDataRepository = projectData;
     }
 
     public bool SignupUser(VolunteerDTO signupData)
@@ -46,15 +49,17 @@ namespace CrdsGoLocalApi.Services.Signup
     {
       var contact = new Contact
       {
+        Company = false,
+        ContactStatusId = MpConstants.ActiveContactStatus,
         FirstName = firstName,
-        Nickname = firstName,
+        DisplayName = $"{lastName}, {firstName}",
         LastName = lastName,
         EmailAddress = email,
         DateOfBirth = birthday,
         HouseholdId = householdId
       };
 
-      // TODO: Create Contact Record
+      contact.ContactId = _contactDataRepository.CreateContact(contact);
 
       return contact.ContactId;
     }
