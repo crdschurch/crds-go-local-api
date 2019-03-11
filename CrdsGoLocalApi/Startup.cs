@@ -3,6 +3,7 @@ using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
 using CrdsGoLocalApi.Services.Settings;
 using CrdsGoLocalApi.Services.Settings.Services;
+using CrdsGoLocalApi.Services.Signup;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.Configuration;
 using Microsoft.AspNetCore.Builder;
@@ -36,11 +37,12 @@ namespace CrdsGoLocalApi
 
       //Dependency Injection
       CrossroadsWebCommonConfig.Register(services);
-      services.AddSingleton<ISettingsService, SettingsService>();
-      services.AddSingleton<IProjectService, ProjectService>();
-      services.AddSingleton<ITokenService, TokenService>();
       services.AddSingleton<ICacheService, CacheService>();
       services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();
+      services.AddSingleton<IProjectService, ProjectService>();
+      services.AddSingleton<ISettingsService, SettingsService>();
+      services.AddSingleton<ISignupService, SignupService>();
+      services.AddSingleton<ITokenService, TokenService>();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
