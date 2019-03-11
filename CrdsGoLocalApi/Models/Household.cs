@@ -11,8 +11,5 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "Household_Name")]
     public string HouseholdName { get; set; }
-
-    [JsonProperty(PropertyName = "Congregation_ID")]
-    public int? CongregationId { get; set; }
   }
 }
