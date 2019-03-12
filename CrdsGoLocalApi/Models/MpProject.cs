@@ -69,5 +69,8 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "Group_ID")]
     public int? GroupId { get; set; }
+
+    [JsonProperty(PropertyName = "Initiative_Event_ID")]
+    public int EventId { get; set; }
   }
 }
