@@ -5,6 +5,7 @@ using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
+using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Services.Signup
 {
@@ -14,6 +15,8 @@ namespace CrdsGoLocalApi.Services.Signup
     private readonly IHouseholdDataRepository _householdDataRepository;
     private readonly IParticipantDataRepository _participantDataRepository;
     private readonly IProjectDataRepository _projectDataRepository;
+
+    private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
     public SignupService(IContactDataRepository contactData, IHouseholdDataRepository householdData, IParticipantDataRepository participantData, IProjectDataRepository projectData)
     {
@@ -25,18 +28,27 @@ namespace CrdsGoLocalApi.Services.Signup
 
     public bool SignupUser(VolunteerDTO signupData)
     {
-      var project = _projectDataRepository.GetProject(signupData.ProjectId);
-      var houseHoldId = CreateHousehold(signupData.LastName);
-      var contactId = CreateContact(signupData.FirstName, 
-        signupData.LastName, 
-        signupData.Email, 
-        signupData.BirthDate,
-        houseHoldId);
-      var participantId = CreateParticipant(contactId);
-      var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId);
-      var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
-
-      return true;
+      var succeeded = true;
+      try
+      {
+        var project = _projectDataRepository.GetProject(signupData.ProjectId);
+        var houseHoldId = CreateHousehold(signupData.LastName);
+        var contactId = CreateContact(signupData.FirstName,
+          signupData.LastName,
+          signupData.Email,
+          signupData.BirthDate,
+          houseHoldId);
+        var participantId = CreateParticipant(contactId);
+        var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId);
+        var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
+      }
+      catch (Exception ex)
+      {
+        Logger.Error(ex, "Error saving signup for user");
+        Logger.Error(JsonConvert.SerializeObject(signupData));
+        succeeded = false;
+      }
+      return succeeded;
     }
 
     public int CreateHousehold(string householdName)
@@ -59,7 +71,8 @@ namespace CrdsGoLocalApi.Services.Signup
         LastName = lastName,
         EmailAddress = email,
         DateOfBirth = birthday,
-        HouseholdId = householdId
+        HouseholdId = householdId,
+        HouseholdPosition = MpConstants.HeadOfHousehold
       };
 
       contact.ContactId = _contactDataRepository.CreateContact(contact);

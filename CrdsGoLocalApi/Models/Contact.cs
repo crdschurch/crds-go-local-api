@@ -33,5 +33,8 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "Contact_Status")]
     public int ContactStatusId { get; set; }
+
+    [JsonProperty(PropertyName = "Household_Position_ID")]
+    public int HouseholdPosition { get; set; }
   }
 }
