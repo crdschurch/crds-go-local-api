@@ -93,7 +93,7 @@ namespace CrdsGoLocalApi.Services.Signup
           StartDate = DateTime.Now
         };
 
-        // TODO: Create Group Participant Record
+        groupParticipant.GroupParticipantId = _participantDataRepository.CreateGroupParticipant(groupParticipant);
 
         return groupParticipant.GroupParticipantId;
       }
@@ -111,7 +111,7 @@ namespace CrdsGoLocalApi.Services.Signup
         ParticipantStatus = MpConstants.RegisteredEventParticipantStatus
       };
 
-      // TODO: Create Event Participant
+      eventParticipant.EventParticipantId = _participantDataRepository.CreateEventParticipant(eventParticipant);
 
       return eventParticipant.EventParticipantId;
     }

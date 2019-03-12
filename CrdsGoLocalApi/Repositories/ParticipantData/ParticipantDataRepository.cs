@@ -24,5 +24,25 @@ namespace CrdsGoLocalApi.Repositories.ParticipantData
         .Create<Participant>(participantData);
       return participantData.ParticipantId;
     }
+
+    public int CreateEventParticipant(EventParticipant eventParticipantData)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      eventParticipantData = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .Build()
+        .Create<EventParticipant>(eventParticipantData);
+      return eventParticipantData.EventParticipantId;
+    }
+
+    public int CreateGroupParticipant(GroupParticipant groupParticipantData)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      groupParticipantData = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .Build()
+        .Create<GroupParticipant>(groupParticipantData);
+      return groupParticipantData.GroupParticipantId;
+    }
   }
 }
