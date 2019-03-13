@@ -22,5 +22,11 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "projectId")]
     public int ProjectId { get; set; }
+
+    [JsonProperty(PropertyName = "")]
+    public int KidsTwoToSevenCount { get; set; }
+
+    [JsonProperty(PropertyName = "")]
+    public int KidsEightToTwelveCount { get; set; }
   }
 }

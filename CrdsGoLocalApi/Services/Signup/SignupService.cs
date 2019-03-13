@@ -41,6 +41,7 @@ namespace CrdsGoLocalApi.Services.Signup
         var participantId = CreateParticipant(contactId);
         var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId);
         var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
+        var goLocalKidsId = CreateGoLocalKids(groupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
       }
       catch (Exception ex)
       {
@@ -127,6 +128,23 @@ namespace CrdsGoLocalApi.Services.Signup
       eventParticipant.EventParticipantId = _participantDataRepository.CreateEventParticipant(eventParticipant);
 
       return eventParticipant.EventParticipantId;
+    }
+
+    public int CreateGoLocalKids(int groupParticipantId, int kids2To7, int kids8To12)
+    {
+      if (groupParticipantId != 0 && kids2To7 + kids8To12 > 0)
+      {
+        var goLocalKids = new GoLocalKids
+        {
+          GroupParticipantId = groupParticipantId,
+          TwoToSeven = kids2To7,
+          EightToTwelve = kids8To12
+        };
+
+        goLocalKids.GoLocalKidsId = _participantDataRepository.CreateGoLocalKids(goLocalKids);
+        return goLocalKids.GoLocalKidsId;
+      }
+      return 0;
     }
   }
 }
