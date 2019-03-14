@@ -44,5 +44,15 @@ namespace CrdsGoLocalApi.Repositories.ParticipantData
         .Create<GroupParticipant>(groupParticipantData);
       return groupParticipantData.GroupParticipantId;
     }
+
+    public int CreateGoLocalKids(GoLocalKids kidsData)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      kidsData = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .Build()
+        .Create<GoLocalKids>(kidsData);
+      return kidsData.GoLocalKidsId;
+    }
   }
 }
