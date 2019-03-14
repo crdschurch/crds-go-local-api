@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Models
@@ -28,5 +29,8 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "countOfKidsBetweenEightAndTwelve")]
     public int KidsEightToTwelveCount { get; set; }
+
+    [JsonProperty(PropertyName = "guests")]
+    public List<GuestContact> Guests { get; set; }
   }
 }
