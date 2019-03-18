@@ -35,17 +35,17 @@ namespace CrdsGoLocalApi.Services.Signup
       try
       {
         var project = _projectDataRepository.GetProject(signupData.ProjectId);
-        var houseHoldId = CreateHousehold(signupData.LastName);
-        var contactId = CreateContact(signupData.FirstName,
-          signupData.LastName,
-          signupData.Email,
-          signupData.BirthDate,
-          houseHoldId);
-        var participantId = CreateParticipant(contactId);
-        var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId);
-        var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
+        var groupParticipantId = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.BirthDate, project);
         var goLocalKidsId = CreateGoLocalKids(groupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
 
+        if (signupData.Guests?.Count > 0)
+        {
+          foreach (var guest in signupData.Guests)
+          {
+            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, guest.BirthDate, project, groupParticipantId);
+          }
+          
+        }
         succeeded = _emailRepository.SendConfirmationEmail(project, contactId);
       }
       catch (Exception ex)
@@ -55,6 +55,20 @@ namespace CrdsGoLocalApi.Services.Signup
         succeeded = false;
       }
       return succeeded;
+    }
+
+    public int SignupVolunteer(string firstName, string lastName, string email, DateTime birthDate, MpProject project, int? enrolledByGroupParticipantId = null)
+    {
+      var houseHoldId = CreateHousehold(lastName);
+      var contactId = CreateContact(firstName,
+        lastName,
+        email,
+        birthDate,
+        houseHoldId);
+      var participantId = CreateParticipant(contactId);
+      var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipantId);
+      var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
+      return groupParticipantId;
     }
 
     public int CreateHousehold(string householdName)
@@ -100,7 +114,7 @@ namespace CrdsGoLocalApi.Services.Signup
       return participant.ParticipantId;
     }
 
-    public int CreateGroupParticipant(int participantId, int? groupId)
+    public int CreateGroupParticipant(int participantId, int? groupId, int? enrolledByGroupParticipant)
     {
       if (groupId.HasValue)
       {
@@ -109,7 +123,8 @@ namespace CrdsGoLocalApi.Services.Signup
           ParticipantId = participantId,
           GroupRoleId = MpConstants.GroupMemberRoleId,
           GroupId = groupId.GetValueOrDefault(),
-          StartDate = DateTime.Now
+          StartDate = DateTime.Now,
+          EnrolledBy = enrolledByGroupParticipant
         };
 
         groupParticipant.GroupParticipantId = _participantDataRepository.CreateGroupParticipant(groupParticipant);
