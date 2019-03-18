@@ -5,6 +5,7 @@ using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
+using CrdsGoLocalApi.Services.Email;
 using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Services.Signup
@@ -12,15 +13,17 @@ namespace CrdsGoLocalApi.Services.Signup
   public class SignupService : ISignupService
   {
     private readonly IContactDataRepository _contactDataRepository;
+    private readonly IEmailRepository _emailRepository;
     private readonly IHouseholdDataRepository _householdDataRepository;
     private readonly IParticipantDataRepository _participantDataRepository;
     private readonly IProjectDataRepository _projectDataRepository;
 
     private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
 
-    public SignupService(IContactDataRepository contactData, IHouseholdDataRepository householdData, IParticipantDataRepository participantData, IProjectDataRepository projectData)
+    public SignupService(IContactDataRepository contactData, IEmailRepository emailRepository, IHouseholdDataRepository householdData, IParticipantDataRepository participantData, IProjectDataRepository projectData)
     {
       _contactDataRepository = contactData;
+      _emailRepository = emailRepository;
       _householdDataRepository = householdData;
       _participantDataRepository = participantData;
       _projectDataRepository = projectData;
@@ -42,6 +45,8 @@ namespace CrdsGoLocalApi.Services.Signup
         var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId);
         var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
         var goLocalKidsId = CreateGoLocalKids(groupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
+
+        succeeded = _emailRepository.SendConfirmationEmail(project, contactId);
       }
       catch (Exception ex)
       {
