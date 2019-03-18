@@ -16,6 +16,9 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "Email_Address")]
     public string EmailAddress { get; set; }
 
+    [JsonProperty(PropertyName = "Mobile_Phone")]
+    public string MobilePhone { get; set; }
+
     [JsonProperty(PropertyName = "First_Name")]
     public string FirstName { get; set; }
 
