@@ -32,14 +32,14 @@ namespace CrdsGoLocalApi.Services.Signup
       try
       {
         var project = _projectDataRepository.GetProject(signupData.ProjectId);
-        var groupParticipantId = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.BirthDate, project);
+        var groupParticipantId = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.PhoneNumber, signupData.BirthDate, project);
         var goLocalKidsId = CreateGoLocalKids(groupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
 
         if (signupData.Guests?.Count > 0)
         {
           foreach (var guest in signupData.Guests)
           {
-            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, guest.BirthDate, project, groupParticipantId);
+            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, groupParticipantId);
           }
           
         }
@@ -53,14 +53,16 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
-    public int SignupVolunteer(string firstName, string lastName, string email, DateTime birthDate, MpProject project, int? enrolledByGroupParticipantId = null)
+    public int SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, 
+                               MpProject project, int? enrolledByGroupParticipantId = null)
     {
       var houseHoldId = CreateHousehold(lastName);
       var contactId = CreateContact(firstName,
-        lastName,
-        email,
-        birthDate,
-        houseHoldId);
+                                    lastName,
+                                    email,
+                                    phoneNumber,
+                                    birthDate,
+                                    houseHoldId);
       var participantId = CreateParticipant(contactId);
       var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipantId);
       var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
@@ -76,7 +78,8 @@ namespace CrdsGoLocalApi.Services.Signup
       return household.HouseholdId;
     }
 
-    public int CreateContact(string firstName, string lastName, string email, DateTime birthday, int householdId)
+    public int CreateContact(string firstName, string lastName, string email, string phoneNumber, 
+                             DateTime birthday, int householdId)
     {
       var contact = new Contact
       {
@@ -86,6 +89,7 @@ namespace CrdsGoLocalApi.Services.Signup
         DisplayName = $"{lastName}, {firstName}",
         LastName = lastName,
         EmailAddress = email,
+        MobilePhone = phoneNumber,
         DateOfBirth = birthday,
         HouseholdId = householdId,
         HouseholdPosition = MpConstants.HeadOfHousehold
