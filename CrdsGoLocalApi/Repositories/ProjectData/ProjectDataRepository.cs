@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.MinistryPlatform;
@@ -61,7 +62,7 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         .GroupBy("Group_ID")
         .AddSelectColumn("Group_ID")
         .AddSelectColumn("COUNT(*) AS Participant_Count")
-        .WithFilter($"Group_ID IN ({idList})")
+        .WithFilter($"Group_ID IN ({idList}) AND (End_Date IS NULL OR End_Date > GETDATE()) AND Group_Role_ID = {MpConstants.GroupMemberRoleId}")
         .RestrictResultCount(0)
         .Build()
         .SearchViaPost<GroupCount>("Group_Participants");
