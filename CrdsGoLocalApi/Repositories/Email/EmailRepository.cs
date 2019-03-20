@@ -24,8 +24,8 @@ namespace CrdsGoLocalApi.Repositories.Email
       var email = new EmailCommunication
       {
         ToContactId = new List<int>{ toContact },
-        FromContactId = group.PrimaryContact,
-        SenderContactId = group.PrimaryContact,
+        FromContactId = group.PrimaryContactId,
+        SenderContactId = group.PrimaryContactId,
         TemplateId = MpConstants.ConfirmationEmailTemplate,
         MergeData = new Dictionary<string, object>
         {

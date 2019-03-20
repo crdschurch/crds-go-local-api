@@ -10,6 +10,6 @@ namespace CrdsGoLocalApi.Models
     public int GroupId { get; set; }
 
     [JsonProperty(PropertyName = "Primary_Contact")]
-    public int PrimaryContact { get; set; }
+    public int PrimaryContactId { get; set; }
   }
 }
