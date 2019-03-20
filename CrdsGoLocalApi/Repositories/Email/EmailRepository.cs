@@ -18,12 +18,12 @@ namespace CrdsGoLocalApi.Repositories.Email
       _emailSender = emailSender;
       _groupRepository = groupData;
     }
-    public bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContact)
+    public bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContactId)
     {
       var group = _groupRepository.GetGroup(projectData.GroupId.Value);
       var email = new EmailCommunication
       {
-        ToContactId = new List<int>{ toContact },
+        ToContactId = new List<int>{ toContactId },
         FromContactId = group.PrimaryContactId,
         SenderContactId = group.PrimaryContactId,
         TemplateId = MpConstants.ConfirmationEmailTemplate,
