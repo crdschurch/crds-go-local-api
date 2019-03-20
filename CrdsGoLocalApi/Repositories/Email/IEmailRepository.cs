@@ -4,6 +4,6 @@ namespace CrdsGoLocalApi.Repositories.Email
 {
   public interface IEmailRepository
   {
-    bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContact);
+    bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContactId);
   }
 }
