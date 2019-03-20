@@ -1,4 +1,6 @@
 ﻿using CrdsGoLocalApi.Repositories.ContactData;
+using CrdsGoLocalApi.Repositories.Email;
+using CrdsGoLocalApi.Repositories.GroupData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
@@ -42,6 +44,8 @@ namespace CrdsGoLocalApi
       CrossroadsWebCommonConfig.Register(services);
       services.AddSingleton<ICacheService, CacheService>();
       services.AddSingleton<IContactDataRepository, ContactDataRepository>();
+      services.AddSingleton<IEmailRepository, EmailRepository>();
+      services.AddSingleton<IGroupDataRepository, GroupDataRepository>();
       services.AddSingleton<IHouseholdDataRepository, HouseholdDataRepository>();
       services.AddSingleton<IParticipantDataRepository, ParticipantDataRepository>();
       services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();

@@ -2,10 +2,10 @@
 using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Repositories.ContactData;
+using CrdsGoLocalApi.Repositories.Email;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
-using CrdsGoLocalApi.Services.Email;
 using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Services.Signup
@@ -35,18 +35,18 @@ namespace CrdsGoLocalApi.Services.Signup
       try
       {
         var project = _projectDataRepository.GetProject(signupData.ProjectId);
-        var groupParticipantId = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.BirthDate, project);
-        var goLocalKidsId = CreateGoLocalKids(groupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
+        var mainVolunteer = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.BirthDate, project);
+        var goLocalKidsId = CreateGoLocalKids(mainVolunteer.GroupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
 
         if (signupData.Guests?.Count > 0)
         {
           foreach (var guest in signupData.Guests)
           {
-            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, guest.BirthDate, project, groupParticipantId);
+            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, guest.BirthDate, project, mainVolunteer.GroupParticipantId);
           }
           
         }
-        succeeded = _emailRepository.SendConfirmationEmail(project, contactId);
+        succeeded = _emailRepository.SendConfirmationEmail(project, signupData, mainVolunteer.ContactId);
       }
       catch (Exception ex)
       {
@@ -57,18 +57,19 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
-    public int SignupVolunteer(string firstName, string lastName, string email, DateTime birthDate, MpProject project, int? enrolledByGroupParticipantId = null)
+    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, DateTime birthDate, MpProject project, int? enrolledByGroupParticipantId = null)
     {
+      var newVol = new NewVolunteer();
       var houseHoldId = CreateHousehold(lastName);
-      var contactId = CreateContact(firstName,
+      newVol.ContactId = CreateContact(firstName,
         lastName,
         email,
         birthDate,
         houseHoldId);
-      var participantId = CreateParticipant(contactId);
-      var groupParticipantId = CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipantId);
-      var eventParticipantId = CreateEventParticipant(participantId, groupParticipantId, project.EventId);
-      return groupParticipantId;
+      var participantId = CreateParticipant(newVol.ContactId);
+      newVol.GroupParticipantId = CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipantId);
+      var eventParticipantId = CreateEventParticipant(participantId, newVol.GroupParticipantId, project.EventId);
+      return newVol;
     }
 
     public int CreateHousehold(string householdName)

@@ -1,9 +1,9 @@
 using CrdsGoLocalApi.Models;
 
-namespace CrdsGoLocalApi.Services.Email
+namespace CrdsGoLocalApi.Repositories.Email
 {
   public interface IEmailRepository
   {
-    bool SendConfirmationEmail(MpProject projectData, int toContact);
+    bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContact);
   }
 }

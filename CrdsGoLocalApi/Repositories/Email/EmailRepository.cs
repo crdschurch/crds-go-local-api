@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Repositories.GroupData;
 using Crossroads.Web.Common.MinistryPlatform;
 using Crossroads.Web.Common.Models;
 
-namespace CrdsGoLocalApi.Services.Email
+namespace CrdsGoLocalApi.Repositories.Email
 {
   public class EmailRepository : IEmailRepository
   {
@@ -28,13 +29,13 @@ namespace CrdsGoLocalApi.Services.Email
         TemplateId = MpConstants.ConfirmationEmailTemplate,
         MergeData = new Dictionary<string, object>
         {
-          {"[Project_Name]", projectData.ProjectName },
-          {"[Address]", $"{projectData.Address1} {projectData.Address2} {projectData.AddressCity}, {projectData.AddressState} {projectData.AddressZip}" },
-          {"[Start_Date]", projectData.StartDate },
-          {"[Project_Type_Description]", projectData.ProjectType },
-          {"[Kids_2_7]", volunteerData.KidsTwoToSevenCount },
-          {"[Kids_8_12]", volunteerData.KidsEightToTwelveCount },
-          //{"[Guest_List]", volunteerData.Guests }
+          {"Project_Name", projectData.ProjectName },
+          {"Address", $"{projectData.Address1} {projectData.Address2} {projectData.AddressCity}, {projectData.AddressState} {projectData.AddressZip}" },
+          {"Start_Date", projectData.StartDate },
+          {"Project_Type_Description", projectData.ProjectType },
+          {"Kids_2_7", volunteerData.KidsTwoToSevenCount },
+          {"Kids_8_12", volunteerData.KidsEightToTwelveCount },
+          {"Guest_List", "<div style=\"margin-left: 40px\">" + string.Join("<br>", volunteerData.Guests.Select(g => g.FirstName + " " + g.LastName)) + "</div>" }
         }
       };
       var sent = _emailSender.SendEmail(email, false).Result;
