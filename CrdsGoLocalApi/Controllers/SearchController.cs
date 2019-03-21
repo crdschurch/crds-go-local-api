@@ -1,4 +1,5 @@
-﻿using CrdsGoLocalApi.Services.Project;
+﻿using System;
+using CrdsGoLocalApi.Services.Project;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CrdsGoLocalApi.Controllers
@@ -7,6 +8,7 @@ namespace CrdsGoLocalApi.Controllers
     [ApiController]
     public class SearchController : ControllerBase
     {
+      private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
       private readonly IProjectService _projectService;
 
       public SearchController(IProjectService projectService)
@@ -19,8 +21,17 @@ namespace CrdsGoLocalApi.Controllers
       [Route("projects")]
       public IActionResult GetProjects()
       {
-        var projects = _projectService.GetAllProjects();
-        return Ok(projects);
+        try
+        {
+          _logger.Info("Searching for projects");
+          var projects = _projectService.GetAllProjects();
+          return Ok(projects);
+        }
+        catch (Exception ex)
+        {
+          _logger.Error(ex, "Error getting projects");
+          return BadRequest();
+        }
       }
     }
 }

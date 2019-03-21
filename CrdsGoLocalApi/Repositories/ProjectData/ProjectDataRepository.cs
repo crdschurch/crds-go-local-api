@@ -11,6 +11,7 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
   {
     private readonly ITokenService _tokenService;
     private readonly IMinistryPlatformRestRequestBuilderFactory _ministryPlatformBuilder;
+    private readonly static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
     public ProjectDataRepository(ITokenService tokenService, IMinistryPlatformRestRequestBuilderFactory ministryPlatformRestRequestBuilderFactory)
     {
@@ -20,8 +21,11 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
 
     public List<MpProject> GetProjectList()
     {
-      var apiToken = _tokenService.GetClientToken();
+      _logger.Info("Calling _tokenService.GetClientToken from GetProjectList()...");
+      string apiToken = _tokenService.GetClientToken();
+      _logger.Info($"Got api token: {apiToken}");
       var now = DateTime.Now;
+      _logger.Info($"Attempting to get projects...");
       var projects = _ministryPlatformBuilder.NewRequestBuilder()
         .WithAuthenticationToken(apiToken)
         .AddSelectColumn("Project_ID")
@@ -50,6 +54,7 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         .WithFilter($"Initiative_ID_Table.Volunteer_Signup_Start_Date <= '{now}' AND Initiative_ID_Table.Volunteer_Signup_End_Date >= '{now}' AND cr_Projects.Project_Status_ID <> 2")
         .Build()
         .Search<MpProject>("cr_Projects");
+      _logger.Info($"Got back {projects.Count} projects");
       return projects;
     }
 

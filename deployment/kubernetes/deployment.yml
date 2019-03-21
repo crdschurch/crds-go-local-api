@@ -43,7 +43,11 @@ spec:
             requests: 
               memory: "16Mi" 
               cpu: "100m" 
-          env: 
+          env:
+            - name: CRDS_ENV
+              value: $CRDS_ENV
+            - name: LOGZIO_API_TOKEN 
+              value: $LOGZIO_API_TOKEN           
             - name: CRDS_EMBED_ENV 
               value: $CRDS_EMBED_ENV 
             - name: CRDS_WEB 
