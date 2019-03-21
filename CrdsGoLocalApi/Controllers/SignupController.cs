@@ -1,4 +1,5 @@
-﻿using CrdsGoLocalApi.Models;
+﻿using System;
+using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Services.Signup;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +9,7 @@ namespace CrdsGoLocalApi.Controllers
   [ApiController]
   public class SignupController : ControllerBase
   {
+    private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly ISignupService _signupService;
 
     public SignupController(ISignupService signupService)
@@ -20,12 +22,22 @@ namespace CrdsGoLocalApi.Controllers
     [Route("submit")]
     public IActionResult SignupVolunteer(VolunteerDTO volunteerData)
     {
-      var success = _signupService.SignupUser(volunteerData);
-      if (success)
+      try
       {
-        return Ok();
+        var success = _signupService.SignupUser(volunteerData);
+        if (success)
+        {
+          return Ok();
+        }
+        return BadRequest();
       }
-      return BadRequest();
+      catch (Exception ex)
+      {
+        _logger.Error(ex, "Error saving signup");
+        _logger.Error($"Volunteer info: First Name: {volunteerData.FirstName}, Last Name: {volunteerData.LastName}, Email: {volunteerData.Email}, Project: {volunteerData.ProjectId}");
+        return BadRequest();
+      }
+      
     }
   }
 }

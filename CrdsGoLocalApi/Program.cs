@@ -1,11 +1,5 @@
-﻿using System;
-using Logzio.DotNet.NLog;
-using Microsoft.AspNetCore;
+﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
-using NLog.Web;
 
 namespace CrdsGoLocalApi
 {
