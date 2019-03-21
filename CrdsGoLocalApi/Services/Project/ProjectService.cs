@@ -7,6 +7,7 @@ namespace CrdsGoLocalApi.Services.Project
 {
   public class ProjectService : IProjectService
   {
+    private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly IProjectDataRepository _projectDataRepository;
 
     public ProjectService(IProjectDataRepository projectData)
@@ -16,11 +17,17 @@ namespace CrdsGoLocalApi.Services.Project
 
     public List<ProjectDTO> GetAllProjects()
     {
+      _logger.Info("Getting Projects from MP");
       var projects = _projectDataRepository.GetProjectList();
       var groupIds = projects.Select(p => p.GroupId.GetValueOrDefault()).ToList();
+
+      _logger.Info("Getting participant counts");
       var volunteerCounts = _projectDataRepository.GetGroupParticipantCounts(groupIds);
+
+      _logger.Info("Getting project leaders");
       var projectLeaders = _projectDataRepository.GetProjectLeaders(groupIds);
 
+      _logger.Info("Converting MP Projects to DTO objects");
       var projectList = projects.Select(p => new ProjectDTO
       {
         Id = p.ProjectId,
@@ -42,6 +49,8 @@ namespace CrdsGoLocalApi.Services.Project
         ProjectDescription = p.ProjectDescription,
         ProjectStatusId = p.ProjectStatusId
       }).ToList();
+
+      _logger.Info("Done getting projects");
       return projectList;
     }
   }
