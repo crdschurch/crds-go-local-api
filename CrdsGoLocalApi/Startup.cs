@@ -6,7 +6,6 @@ using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
 using Crossroads.Microservice.Settings;
 using Crossroads.Microservice.Logging;
-using System;
 using CrdsGoLocalApi.Services.Signup;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.Configuration;
