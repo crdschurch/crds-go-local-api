@@ -42,7 +42,7 @@ namespace CrdsGoLocalApi.Services.Signup
         {
           foreach (var guest in signupData.Guests)
           {
-            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer.GroupParticipantId);
+            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer, guest.HouseholdPositionId);
           }
           
         }
@@ -57,18 +57,27 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
-    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, MpProject project, int? enrolledByGroupParticipantId = null)
+    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null)
     {
       var newVol = new NewVolunteer();
-      var houseHoldId = CreateHousehold(lastName);
+      if (householdPostionId.HasValue && mainVolunteer?.HouseholdId > 0)
+      {
+        newVol.HouseholdId = mainVolunteer.HouseholdId;
+      }
+      else
+      {
+        newVol.HouseholdId = CreateHousehold(lastName);
+      }
+      
       newVol.ContactId = CreateContact(firstName,
         lastName,
         email,
         phoneNumber,
         birthDate,
-        houseHoldId);
+        newVol.HouseholdId,
+        householdPostionId);
       var participantId = CreateParticipant(newVol.ContactId);
-      newVol.GroupParticipantId = CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipantId);
+      newVol.GroupParticipantId = CreateGroupParticipant(participantId, project.GroupId, mainVolunteer?.GroupParticipantId);
       var eventParticipantId = CreateEventParticipant(participantId, newVol.GroupParticipantId, project.EventId);
       return newVol;
     }
@@ -83,7 +92,7 @@ namespace CrdsGoLocalApi.Services.Signup
     }
 
     public int CreateContact(string firstName, string lastName, string email, string phoneNumber, 
-                             DateTime birthday, int householdId)
+                             DateTime birthday, int householdId, int? householdPositionId)
     {
       var contact = new Contact
       {
@@ -96,7 +105,7 @@ namespace CrdsGoLocalApi.Services.Signup
         MobilePhone = phoneNumber,
         DateOfBirth = birthday,
         HouseholdId = householdId,
-        HouseholdPosition = MpConstants.HeadOfHousehold
+        HouseholdPosition = householdPositionId ?? MpConstants.HeadOfHousehold
       };
 
       contact.ContactId = _contactDataRepository.CreateContact(contact);
