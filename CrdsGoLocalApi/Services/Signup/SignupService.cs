@@ -42,7 +42,7 @@ namespace CrdsGoLocalApi.Services.Signup
         {
           foreach (var guest in signupData.Guests)
           {
-            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer.GroupParticipantId);
+            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer, guest.HouseholdPositionId);
           }
           
         }
@@ -57,10 +57,18 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
-    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, MpProject project, int? enrolledByGroupParticipantId = null, int? householdPostionId = null)
+    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null)
     {
       var newVol = new NewVolunteer();
-      newVol.HouseholdId = CreateHousehold(lastName);
+      if (householdPostionId.HasValue && mainVolunteer?.HouseholdId > 0)
+      {
+        newVol.HouseholdId = mainVolunteer.HouseholdId;
+      }
+      else
+      {
+        newVol.HouseholdId = CreateHousehold(lastName);
+      }
+      
       newVol.ContactId = CreateContact(firstName,
         lastName,
         email,
@@ -69,7 +77,7 @@ namespace CrdsGoLocalApi.Services.Signup
         newVol.HouseholdId,
         householdPostionId);
       var participantId = CreateParticipant(newVol.ContactId);
-      newVol.GroupParticipantId = CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipantId);
+      newVol.GroupParticipantId = CreateGroupParticipant(participantId, project.GroupId, mainVolunteer?.GroupParticipantId);
       var eventParticipantId = CreateEventParticipant(participantId, newVol.GroupParticipantId, project.EventId);
       return newVol;
     }
