@@ -8,6 +8,7 @@ namespace CrdsGoLocalApi.Services.Token
   {
     private readonly ICacheService _cache;
     private readonly IApiUserRepository _apiRepo;
+    private readonly static NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
     public TokenService(ICacheService cacheService, IApiUserRepository apiUserRepository)
     {
@@ -17,9 +18,15 @@ namespace CrdsGoLocalApi.Services.Token
 
     public string GetClientToken()
     {
-      return _cache.GetOrSet<string>("token",
+      _logger.Info("Attempting to get a client token...");
+
+      var token = _cache.GetOrSet<string>("token",
         TimeSpan.FromMinutes(29),
         () => _apiRepo.GetApiClientToken("CRDS.GOLocal"));
+
+      _logger.Info($"Got client token {token}");
+
+      return token;
     }
   }
 }

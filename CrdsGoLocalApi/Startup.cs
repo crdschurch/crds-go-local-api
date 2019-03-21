@@ -4,8 +4,9 @@ using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
 using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
-using CrdsGoLocalApi.Services.Settings;
-using CrdsGoLocalApi.Services.Settings.Services;
+using Crossroads.Microservice.Settings;
+using Crossroads.Microservice.Logging;
+using System;
 using CrdsGoLocalApi.Services.Signup;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.Configuration;
@@ -37,6 +38,11 @@ namespace CrdsGoLocalApi
       {
         c.SwaggerDoc("v1", new Info { Title = "GO Local API", Version = "v1" });
       });
+
+      SettingsService settingsService = new SettingsService();
+      services.AddSingleton<ISettingsService>(settingsService);
+
+      Logger.SetUpLogging(settingsService);
 
       //Dependency Injection
       CrossroadsWebCommonConfig.Register(services);
