@@ -57,9 +57,18 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
-    public Contact GetContactData(int contactId)
+    public ContactDTO GetContactData(int contactId)
     {
-      var contact = _contactDataRepository.GetContact(contactId);
+      var contactData = _contactDataRepository.GetContact(contactId);
+      var contact = new ContactDTO
+      {
+        ContactId = contactData.ContactId,
+        FirstName = contactData.FirstName,
+        LastName = contactData.LastName,
+        Email = contactData.EmailAddress,
+        BirthDate = contactData.DateOfBirth,
+        PhoneNumber = contactData.MobilePhone
+      };
       return contact;
     }
 
