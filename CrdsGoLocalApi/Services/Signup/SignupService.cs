@@ -57,6 +57,12 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
+    public Contact GetContactData(int contactId)
+    {
+      var contact = _contactDataRepository.GetContact(contactId);
+      return contact;
+    }
+
     public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null)
     {
       var newVol = new NewVolunteer();

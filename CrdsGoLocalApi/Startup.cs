@@ -1,9 +1,11 @@
-﻿using CrdsGoLocalApi.Repositories.ContactData;
+﻿using CrdsGoLocalApi.Middleware;
+using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.Email;
 using CrdsGoLocalApi.Repositories.GroupData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
+using CrdsGoLocalApi.Services.Auth;
 using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
 using Crossroads.Microservice.Settings;
@@ -52,6 +54,7 @@ namespace CrdsGoLocalApi
       services.AddSingleton<IEmailRepository, EmailRepository>();
       services.AddSingleton<IGroupDataRepository, GroupDataRepository>();
       services.AddSingleton<IHouseholdDataRepository, HouseholdDataRepository>();
+      services.AddSingleton<IMpAuthService, MpAuthService>();
       services.AddSingleton<IParticipantDataRepository, ParticipantDataRepository>();
       services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();
       services.AddSingleton<IProjectService, ProjectService>();
@@ -118,6 +121,7 @@ namespace CrdsGoLocalApi
         });
       }
 
+      app.UseUserAuthorizationTokenMiddleware();
       app.UseHttpsRedirection();
       app.UseMvc();
     }
