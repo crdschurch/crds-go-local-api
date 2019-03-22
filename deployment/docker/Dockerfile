@@ -14,6 +14,9 @@ ARG CRDS_EMBED_ENV
 # Change work directory back to /app - root of proj 
 WORKDIR /app
 
+# Run Unit Tests
+RUN dotnet test CrdsGoLocalApi.Tests/CrdsGoLocalApi.Tests.csproj
+
 WORKDIR /app/CrdsGoLocalApi
 
 # Publish build to out directory 
@@ -27,4 +30,28 @@ WORKDIR /app
 COPY --from=build-env /app/CrdsGoLocalApi/out ./
  
 # Run the dotnet entrypoint for the CrdsGoLocalApi dll 
-ENTRYPOINT ["dotnet", "CrdsGoLocalApi.dll"]
+###ENTRYPOINT ["dotnet", "CrdsGoLocalApi.dll"]
+
+# Install wget
+RUN echo 'installing wget' \
+&& apt-get update \
+&& apt-get install -y wget
+
+RUN echo 'installing gnupg' \
+&& apt-get install -y gnupg
+
+# Install new relic
+RUN echo 'deb http://apt.newrelic.com/debian/ newrelic non-free' | tee /etc/apt/sources.list.d/newrelic.list \
+&& wget -O- https://download.newrelic.com/548C16BF.gpg | apt-key add - \
+&& apt-get update \
+&& apt-get install newrelic-netcore20-agent
+
+# Make sure this is running in production
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+ENV CORECLR_NEWRELIC_HOME=/usr/local/newrelic-netcore20-agent
+
+CMD $CORECLR_NEWRELIC_HOME/run.sh dotnet CrdsGoLocalApi.dll
+
+
+
