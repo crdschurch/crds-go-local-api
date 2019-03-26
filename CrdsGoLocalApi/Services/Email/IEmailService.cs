@@ -5,6 +5,6 @@ namespace CrdsGoLocalApi.Services.Email
 {
   public interface IEmailService
   {
-    string CreateStyledGuestList(VolunteerDTO volunteerData);
+    string CreateStyledAttendeeList(VolunteerDTO volunteerData);
   }
 }

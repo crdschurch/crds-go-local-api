@@ -24,7 +24,7 @@ namespace CrdsGoLocalApi.Tests.Services
       volunteerData.LastName = "Jenkins";
       volunteerData.Guests = new List<GuestContact>();
 
-      string actual = _fixture.CreateStyledGuestList(volunteerData);
+      string actual = _fixture.CreateStyledAttendeeList(volunteerData);
       string expected =  "<div style=\"margin-left: 40px\">Leeroy Jenkins</div>";
 
       Assert.Equal(expected, actual);
@@ -40,7 +40,7 @@ namespace CrdsGoLocalApi.Tests.Services
       volunteerData.Guests.Add(new GuestContact { FirstName = "Angie", LastName = "Wobey" });
       volunteerData.Guests.Add(new GuestContact { FirstName = "Mandy", LastName = "Bagelberry"  });
 
-      string actual = _fixture.CreateStyledGuestList(volunteerData);
+      string actual = _fixture.CreateStyledAttendeeList(volunteerData);
       string expected =  
         "<div style=\"margin-left: 40px\">" +
         "Angie Wobey<br>Mandy Bagelberry<br>Leeroy Jenkins" +

@@ -9,17 +9,17 @@ namespace CrdsGoLocalApi.Services.Email
   {
     public EmailService() {}
 
-    public string CreateStyledGuestList(VolunteerDTO volunteerData)
+    public string CreateStyledAttendeeList(VolunteerDTO volunteerData)
     {
       List<string> attendeeNames = volunteerData.Guests.Select(g => g.FirstName + " " + g.LastName).ToList();
       attendeeNames.Add($"{volunteerData.FirstName} {volunteerData.LastName}");
 
-      string styledGuestList = 
+      string styledAttendeeList = 
         "<div style=\"margin-left: 40px\">"
         + string.Join("<br>", attendeeNames)
         + "</div>";
 
-      return styledGuestList;
+      return styledAttendeeList;
     }
   }
 }

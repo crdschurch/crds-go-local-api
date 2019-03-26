@@ -38,7 +38,7 @@ namespace CrdsGoLocalApi.Repositories.Email
           {"Project_Type_Description", projectData.ProjectType },
           {"Kids_2_7", volunteerData.KidsTwoToSevenCount },
           {"Kids_8_12", volunteerData.KidsEightToTwelveCount },
-          {"Guest_List", _emailService.CreateStyledGuestList(volunteerData) }
+          {"Guest_List", _emailService.CreateStyledAttendeeList(volunteerData) }
         }
       };
       var sent = _emailSender.SendEmail(email, false).Result;
