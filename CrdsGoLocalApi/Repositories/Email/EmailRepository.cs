@@ -3,7 +3,6 @@ using System.Linq;
 using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Repositories.GroupData;
-using CrdsGoLocalApi.Services.Email;
 using Crossroads.Web.Common.MinistryPlatform;
 using Crossroads.Web.Common.Models;
 
@@ -11,14 +10,12 @@ namespace CrdsGoLocalApi.Repositories.Email
 {
   public class EmailRepository : IEmailRepository
   {
-    private readonly IMpEmailSender _emailSender;
-    private readonly IEmailService _emailService;
     private readonly IGroupDataRepository _groupRepository;
+    private readonly IMpEmailSender _emailSender;
 
-    public EmailRepository(IGroupDataRepository groupData, IMpEmailSender emailSender, IEmailService emailService)
+    public EmailRepository(IGroupDataRepository groupData, IMpEmailSender emailSender)
     {
       _emailSender = emailSender;
-      _emailService = emailService;
       _groupRepository = groupData;
     }
     public bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContactId)
@@ -26,7 +23,7 @@ namespace CrdsGoLocalApi.Repositories.Email
       var group = _groupRepository.GetGroup(projectData.GroupId.Value);
       var email = new EmailCommunication
       {
-        ToContactId = new List<int> { toContactId },
+        ToContactId = new List<int>{ toContactId },
         FromContactId = group.PrimaryContactId,
         SenderContactId = group.PrimaryContactId,
         TemplateId = MpConstants.ConfirmationEmailTemplate,
@@ -38,7 +35,7 @@ namespace CrdsGoLocalApi.Repositories.Email
           {"Project_Type_Description", projectData.ProjectType },
           {"Kids_2_7", volunteerData.KidsTwoToSevenCount },
           {"Kids_8_12", volunteerData.KidsEightToTwelveCount },
-          {"Guest_List", _emailService.CreateStyledGuestList(volunteerData) }
+          {"Guest_List", "<div style=\"margin-left: 40px\">" + string.Join("<br>", volunteerData.Guests.Select(g => g.FirstName + " " + g.LastName)) + "</div>" }
         }
       };
       var sent = _emailSender.SendEmail(email, false).Result;
