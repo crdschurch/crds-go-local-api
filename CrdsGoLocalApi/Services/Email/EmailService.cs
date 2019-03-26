@@ -12,7 +12,7 @@ namespace CrdsGoLocalApi.Services.Email
     public string CreateStyledAttendeeList(VolunteerDTO volunteerData)
     {
       List<string> attendeeNames = volunteerData.Guests.Select(g => $"{g.FirstName} {g.LastName}").ToList();
-      attendeeNames.Add($"{volunteerData.FirstName} {volunteerData.LastName}");
+      attendeeNames.Insert(0, $"{volunteerData.FirstName} {volunteerData.LastName}");
 
       string styledAttendeeList = 
         "<div style=\"margin-left: 40px\">"

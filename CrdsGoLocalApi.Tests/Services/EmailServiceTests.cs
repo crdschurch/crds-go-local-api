@@ -43,7 +43,7 @@ namespace CrdsGoLocalApi.Tests.Services
       string actual = _fixture.CreateStyledAttendeeList(volunteerData);
       string expected =  
         "<div style=\"margin-left: 40px\">" +
-        "Angie Wobey<br>Mandy Bagelberry<br>Leeroy Jenkins" +
+        "Leeroy Jenkins<br>Angie Wobey<br>Mandy Bagelberry" +
         "</div>";
 
       Assert.Equal(expected, actual);
