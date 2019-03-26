@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using CrdsGoLocalApi.Services.Email;
 
 namespace CrdsGoLocalApi
 {
@@ -50,6 +51,7 @@ namespace CrdsGoLocalApi
       services.AddSingleton<ICacheService, CacheService>();
       services.AddSingleton<IContactDataRepository, ContactDataRepository>();
       services.AddSingleton<IEmailRepository, EmailRepository>();
+      services.AddSingleton<IEmailService, EmailService>();
       services.AddSingleton<IGroupDataRepository, GroupDataRepository>();
       services.AddSingleton<IHouseholdDataRepository, HouseholdDataRepository>();
       services.AddSingleton<IParticipantDataRepository, ParticipantDataRepository>();
