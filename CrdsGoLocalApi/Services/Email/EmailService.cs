@@ -11,8 +11,8 @@ namespace CrdsGoLocalApi.Services.Email
 
     public string CreateStyledGuestList(VolunteerDTO volunteerData)
     {
-      List<GuestContact> guestsWithLeaderIncluded = GetNewGuestListWithLeaderIncluded(volunteerData);
-      List<string> attendeeNames = guestsWithLeaderIncluded.Select(g => g.FirstName + " " + g.LastName).ToList(); 
+      List<string> attendeeNames = volunteerData.Guests.Select(g => g.FirstName + " " + g.LastName).ToList();
+      attendeeNames.Add($"{volunteerData.FirstName} {volunteerData.LastName}");
 
       string styledGuestList = 
         "<div style=\"margin-left: 40px\">"
@@ -20,16 +20,6 @@ namespace CrdsGoLocalApi.Services.Email
         + "</div>";
 
       return styledGuestList;
-    }
-
-    public List<GuestContact> GetNewGuestListWithLeaderIncluded(VolunteerDTO volunteerData)
-    {
-      GuestContact leaderAsGuest = new GuestContact(volunteerData.FirstName, volunteerData.LastName);
-   
-      List<GuestContact> allGuestsAndLeader = volunteerData.Guests;
-      allGuestsAndLeader.Add(leaderAsGuest);
-
-      return allGuestsAndLeader;
     }
   }
 }

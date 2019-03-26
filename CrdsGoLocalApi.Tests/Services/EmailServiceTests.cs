@@ -37,8 +37,8 @@ namespace CrdsGoLocalApi.Tests.Services
       volunteerData.FirstName = "Leeroy";
       volunteerData.LastName = "Jenkins";
       volunteerData.Guests = new List<GuestContact>();
-      volunteerData.Guests.Add(new GuestContact("Angie", "Wobey"));
-      volunteerData.Guests.Add(new GuestContact("Mandy", "Bagelberry"));
+      volunteerData.Guests.Add(new GuestContact { FirstName = "Angie", LastName = "Wobey" });
+      volunteerData.Guests.Add(new GuestContact { FirstName = "Mandy", LastName = "Bagelberry"  });
 
       string actual = _fixture.CreateStyledGuestList(volunteerData);
       string expected =  
