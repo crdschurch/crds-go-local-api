@@ -19,5 +19,13 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "householdPositionId")]
     public int? HouseholdPositionId { get; set; }
+
+    public GuestContact() {}
+
+    public GuestContact(string firstName, string lastName)
+    {
+      FirstName = firstName;
+      LastName = lastName;
+    }
   }
 }
