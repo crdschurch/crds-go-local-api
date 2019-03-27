@@ -35,7 +35,7 @@ namespace CrdsGoLocalApi.Services.Signup
       try
       {
         var project = _projectDataRepository.GetProject(signupData.ProjectId);
-        var mainVolunteer = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.PhoneNumber, signupData.BirthDate, project);
+        var mainVolunteer = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email, signupData.PhoneNumber, signupData.BirthDate, project, null, null, signupData.ContactId);
         var goLocalKidsId = CreateGoLocalKids(mainVolunteer.GroupParticipantId, signupData.KidsTwoToSevenCount,signupData.KidsEightToTwelveCount);
 
         if (signupData.Guests?.Count > 0)
@@ -72,28 +72,38 @@ namespace CrdsGoLocalApi.Services.Signup
       return contact;
     }
 
-    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null)
+    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber, 
+      DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null, int? contactId = null)
     {
       var newVol = new NewVolunteer();
-      if (householdPostionId.HasValue && mainVolunteer?.HouseholdId > 0)
+      if (contactId == null)
       {
-        newVol.HouseholdId = mainVolunteer.HouseholdId;
+        if (householdPostionId.HasValue && mainVolunteer?.HouseholdId > 0)
+        {
+          newVol.HouseholdId = mainVolunteer.HouseholdId;
+        }
+        else
+        {
+          newVol.HouseholdId = CreateHousehold(lastName);
+        }
+        newVol.ContactId = CreateContact(firstName,
+          lastName,
+          email,
+          phoneNumber,
+          birthDate,
+          newVol.HouseholdId,
+          householdPostionId);
+        newVol.ParticipantId = CreateParticipant(newVol.ContactId);
       }
       else
       {
-        newVol.HouseholdId = CreateHousehold(lastName);
+        newVol.ContactId = UpdateContact(contactId.Value, birthDate, phoneNumber);
+        newVol.HouseholdId = GetHouseholdId(newVol.ContactId);
+        newVol.ParticipantId = GetParticipantId(newVol.ContactId);
       }
-      
-      newVol.ContactId = CreateContact(firstName,
-        lastName,
-        email,
-        phoneNumber,
-        birthDate,
-        newVol.HouseholdId,
-        householdPostionId);
-      var participantId = CreateParticipant(newVol.ContactId);
-      newVol.GroupParticipantId = CreateGroupParticipant(participantId, project.GroupId, mainVolunteer?.GroupParticipantId);
-      var eventParticipantId = CreateEventParticipant(participantId, newVol.GroupParticipantId, project.EventId);
+     
+      newVol.GroupParticipantId = CreateGroupParticipant(newVol.ParticipantId, project.GroupId, mainVolunteer?.GroupParticipantId);
+      var eventParticipantId = CreateEventParticipant(newVol.ParticipantId, newVol.GroupParticipantId, project.EventId);
       return newVol;
     }
 
@@ -193,6 +203,27 @@ namespace CrdsGoLocalApi.Services.Signup
         return goLocalKids.GoLocalKidsId;
       }
       return 0;
+    }
+
+    public int UpdateContact(int contactId, DateTime birthday, string mobilePhone)
+    {
+      var contact = _contactDataRepository.GetContact(contactId);
+      contact.DateOfBirth = birthday;
+      contact.MobilePhone = mobilePhone;
+      _contactDataRepository.UpdateContact(contact);
+      return contactId;
+    }
+
+    public int GetParticipantId(int contactId)
+    {
+      var participantId = _participantDataRepository.GetParticipantId(contactId);
+      return participantId;
+    }
+
+    public int GetHouseholdId(int contactId)
+    {
+      var householdId = _householdDataRepository.GetHouseholdId(contactId);
+      return householdId;
     }
   }
 }

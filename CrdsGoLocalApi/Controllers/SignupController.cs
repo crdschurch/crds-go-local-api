@@ -13,14 +13,10 @@ namespace CrdsGoLocalApi.Controllers
   public class SignupController : AuthBaseController 
   {
     private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
-    private readonly IAuthenticationRepository _authenticationRepository;
-    private readonly IAuthTokenExpiryService _authTokenExpiryService;
     private readonly ISignupService _signupService;
 
     public SignupController(ISignupService signupService, IAuthenticationRepository authentication, IAuthTokenExpiryService authTokenExpiry) : base(authentication, authTokenExpiry)
     {
-      _authenticationRepository = authentication;
-      _authTokenExpiryService = authTokenExpiry;
       _signupService = signupService;
     }
 

@@ -8,5 +8,7 @@ namespace CrdsGoLocalApi.Repositories.ParticipantData
     int CreateEventParticipant(EventParticipant eventParticipantData);
     int CreateGroupParticipant(GroupParticipant groupParticipantData);
     int CreateGoLocalKids(GoLocalKids kidsData);
+
+    int GetParticipantId(int contactId);
   }
 }

@@ -6,5 +6,6 @@ namespace CrdsGoLocalApi.Repositories.ContactData
   {
     int CreateContact(Contact contactData);
     Contact GetContact(int contactId);
+    int UpdateContact(Contact contactData);
   }
 }

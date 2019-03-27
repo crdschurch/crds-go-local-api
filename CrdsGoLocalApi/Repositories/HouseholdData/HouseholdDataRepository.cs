@@ -1,6 +1,7 @@
 ﻿using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.MinistryPlatform;
+using Newtonsoft.Json.Linq;
 
 namespace CrdsGoLocalApi.Repositories.HouseholdData
 {
@@ -23,6 +24,17 @@ namespace CrdsGoLocalApi.Repositories.HouseholdData
         .Build()
         .Create<Household>(householdData);
       return householdData.HouseholdId;
+    }
+
+    public int GetHouseholdId(int contactId)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      var household = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .AddSelectColumn("Household_ID")
+        .Build()
+        .Get<JObject>("Contacts", contactId);
+      return household["Household_ID"].ToObject<int>();
     }
   }
 }
