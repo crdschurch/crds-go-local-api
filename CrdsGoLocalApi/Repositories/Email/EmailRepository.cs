@@ -32,7 +32,7 @@ namespace CrdsGoLocalApi.Repositories.Email
         TemplateId = MpConstants.ConfirmationEmailTemplate,
         MergeData = new Dictionary<string, object>
         {
-          {"Project_Name", projectData.ProjectName },
+          {"Project_Name", $"{projectData.OrgName} - {projectData.ProjectName}" },
           {"Address", $"{projectData.Address1} {projectData.Address2} {projectData.AddressCity}, {projectData.AddressState} {projectData.AddressZip}" },
           {"Start_Date", projectData.StartDate },
           {"Project_Type_Description", projectData.ProjectType },
