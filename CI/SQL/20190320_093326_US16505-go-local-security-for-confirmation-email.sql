@@ -2,9 +2,9 @@ USE MinistryPlatform
 GO 
 
 DECLARE @GoLocalRoleId int = 211;
-DECLARE @OtherHouseholdsPageId int = 432;
+DECLARE @GroupPageId int = 322;
 
-IF NOT EXISTS (SELECT 1 FROM dp_Role_Pages WHERE Role_ID = @GoLocalRoleId AND Page_ID = @OtherHouseholdsPageId)
+IF NOT EXISTS (SELECT 1 FROM dp_Role_Pages WHERE Role_ID = @GoLocalRoleId AND Page_ID = @GroupPageId)
 BEGIN 
 	INSERT INTO [dbo].[dp_Role_Pages]
            ([Role_ID]
@@ -12,6 +12,6 @@ BEGIN
            ,[Access_Level])
      VALUES
            (@GoLocalRoleId
-           ,@OtherHouseholdsPageId
-           ,0)
+           ,@GroupPageId
+           ,1)
 END
