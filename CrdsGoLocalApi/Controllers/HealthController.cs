@@ -13,7 +13,6 @@ namespace CrdsGoLocalApi.Controllers
     [Route("status")]
     public IActionResult GetHealth()
     {
-      _logger.Info("Running health check...");
       return StatusCode(200, "OK");
     }
   }
