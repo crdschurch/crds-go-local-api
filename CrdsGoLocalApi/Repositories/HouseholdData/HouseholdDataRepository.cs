@@ -38,7 +38,6 @@ namespace CrdsGoLocalApi.Repositories.HouseholdData
       return household["Household_ID"].ToObject<int>();
     }
 
-
     public List<HouseholdMembers> GetHouseholdMembers(int householdId)
     {
       var apiToken = _tokenService.GetClientToken();

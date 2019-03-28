@@ -218,9 +218,21 @@ namespace CrdsGoLocalApi.Services.Signup
     public int UpdateContact(int contactId, DateTime birthday, string mobilePhone)
     {
       var contact = _contactDataRepository.GetContact(contactId);
-      contact.DateOfBirth = birthday;
-      contact.MobilePhone = mobilePhone;
-      _contactDataRepository.UpdateContact(contact);
+      var needsUpdate = false;
+      if (contact.DateOfBirth != birthday)
+      {
+        contact.DateOfBirth = birthday;
+        needsUpdate = true;
+      }
+      if (contact.MobilePhone != mobilePhone)
+      {
+        contact.MobilePhone = mobilePhone;
+        needsUpdate = true;
+      }
+      if (needsUpdate)
+      {
+        _contactDataRepository.UpdateContact(contact);
+      }
       return contactId;
     }
 
