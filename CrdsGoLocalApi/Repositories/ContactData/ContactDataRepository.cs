@@ -24,5 +24,25 @@ namespace CrdsGoLocalApi.Repositories.ContactData
         .Create<Contact>(contactData);
       return contactData.ContactId;
     }
+
+    public Contact GetContact(int contactId)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      var contactData = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .Build()
+        .Get<Contact>(contactId);
+      return contactData;
+    }
+
+    public int UpdateContact(Contact contactData)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      contactData = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .Build()
+        .Update(contactData);
+      return contactData.ContactId;
+    }
   }
 }

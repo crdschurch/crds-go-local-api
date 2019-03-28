@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Models
 {
-  public class VolunteerDTO
+  public class ContactDTO
   {
     [JsonProperty(PropertyName = "contactId")]
-    public int? ContactId { get; set; }
+    public int ContactId { get; set; }
 
     [JsonProperty(PropertyName = "firstName")]
     public string FirstName { get; set; }
@@ -23,17 +22,5 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "dob")]
     public DateTime BirthDate { get; set; }
-
-    [JsonProperty(PropertyName = "projectId")]
-    public int ProjectId { get; set; }
-
-    [JsonProperty(PropertyName = "countOfKidsBetweenTwoAndSeven")]
-    public int KidsTwoToSevenCount { get; set; }
-
-    [JsonProperty(PropertyName = "countOfKidsBetweenEightAndTwelve")]
-    public int KidsEightToTwelveCount { get; set; }
-
-    [JsonProperty(PropertyName = "guests")]
-    public List<GuestContact> Guests { get; set; }
   }
 }

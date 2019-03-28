@@ -1,6 +1,8 @@
-﻿using CrdsGoLocalApi.Models;
+﻿using System.Linq;
+using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.MinistryPlatform;
+using Newtonsoft.Json.Linq;
 
 namespace CrdsGoLocalApi.Repositories.ParticipantData
 {
@@ -53,6 +55,17 @@ namespace CrdsGoLocalApi.Repositories.ParticipantData
         .Build()
         .Create<GoLocalKids>(kidsData);
       return kidsData.GoLocalKidsId;
+    }
+
+    public int GetParticipantId(int contactId)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      var participant = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .AddSelectColumn("Participant_Record")
+        .Build()
+        .Get<JObject>("Contacts", contactId);
+      return participant["Participant_Record"].ToObject<int>();
     }
   }
 }
