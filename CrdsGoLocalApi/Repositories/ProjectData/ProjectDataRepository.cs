@@ -51,7 +51,10 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         .AddSelectColumn("Group_ID")
         .AddSelectColumn("Initiative_ID_Table.Event_ID AS Initiative_Event_ID")
         .RestrictResultCount(0)
-        .WithFilter($"Initiative_ID_Table.Volunteer_Signup_Start_Date <= '{now}' AND Initiative_ID_Table.Volunteer_Signup_End_Date >= '{now}' AND cr_Projects.Project_Status_ID <> 2")
+        .WithFilter($"Initiative_ID_Table.Volunteer_Signup_Start_Date <= '{now}' " +
+                    $"AND Initiative_ID_Table.Volunteer_Signup_End_Date >= '{now}' " +
+                    $"AND cr_Projects.Project_Status_ID " +
+                      $"IN ({ProjectStatusIds.ACTIVE}, {ProjectStatusIds.CLOSED_FOR_SIGNUPS})")
         .Build()
         .Search<MpProject>("cr_Projects");
       _logger.Info($"Got back {projects.Count} projects");
