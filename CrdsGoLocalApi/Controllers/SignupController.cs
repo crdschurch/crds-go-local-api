@@ -62,6 +62,7 @@ namespace CrdsGoLocalApi.Controllers
         catch (Exception ex)
         {
           _logger.Error(ex, $"Error getting data for user {authData.UserInfo.Mp.ContactId}");
+          return Unauthorized();
         }
       });
     }
