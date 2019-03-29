@@ -44,6 +44,8 @@ spec:
               memory: "16Mi" 
               cpu: "100m" 
           env:
+            - name: AUTH_SERVICE_BASE_URL
+              value: $AUTH_SERVICE_BASE_URL
             - name: CRDS_ENV
               value: $CRDS_ENV
             - name: LOGZIO_API_TOKEN 
