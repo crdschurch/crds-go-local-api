@@ -102,6 +102,7 @@ namespace CrdsGoLocalApi.Services.Signup
           newVol.HouseholdId,
           householdPostionId);
         newVol.ParticipantId = CreateParticipant(newVol.ContactId);
+        newVol.FamilyMembers = new List<HouseholdMembers>();
       }
       else
       {
