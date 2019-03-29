@@ -20,7 +20,7 @@ namespace CrdsGoLocalApi.Services.Signup
     private readonly IParticipantDataRepository _participantDataRepository;
     private readonly IProjectDataRepository _projectDataRepository;
 
-    private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
+    private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
     public SignupService(IContactDataRepository contactData, IEmailRepository emailRepository,
       IHouseholdDataRepository householdData, IParticipantDataRepository participantData,
@@ -46,19 +46,26 @@ namespace CrdsGoLocalApi.Services.Signup
 
         if (signupData.Guests?.Count > 0)
         {
-          foreach (var guest in signupData.Guests)
+          _logger.Info("Signing up guests...");
+          try
           {
-            var guestContactId = CheckIfGuestIsInHousehold(guest, mainVolunteer.FamilyMembers);
-            SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer,
-              guest.HouseholdPositionId, guestContactId);
+            foreach (var guest in signupData.Guests)
+            {
+              var guestContactId = CheckIfGuestIsInHousehold(guest, mainVolunteer.FamilyMembers);
+              SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer,
+                guest.HouseholdPositionId, guestContactId);
+            }
+          }
+          catch (Exception exc) {
+            _logger.Error("Failed to sign up guests");
           }
         }
         succeeded = _emailRepository.SendConfirmationEmail(project, signupData, mainVolunteer.ContactId);
       }
       catch (Exception ex)
       {
-        Logger.Error(ex, "Error saving signup for user");
-        Logger.Error(JsonConvert.SerializeObject(signupData));
+        _logger.Error(ex, "Error saving signup for user");
+        _logger.Error(JsonConvert.SerializeObject(signupData));
         succeeded = false;
       }
       return succeeded;
@@ -83,6 +90,8 @@ namespace CrdsGoLocalApi.Services.Signup
       DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null,
       int? contactId = null)
     {
+      _logger.Info("Attempting to sign up volunteer...");
+      try {
       var newVol = new NewVolunteer();
       if (contactId == null)
       {
@@ -115,6 +124,11 @@ namespace CrdsGoLocalApi.Services.Signup
         CreateGroupParticipant(newVol.ParticipantId, project.GroupId, mainVolunteer?.GroupParticipantId);
       var eventParticipantId = CreateEventParticipant(newVol.ParticipantId, newVol.GroupParticipantId, project.EventId);
       return newVol;
+      }
+      catch (Exception exc) {
+        _logger.Error($"Failed to signup volunteer, exc: {exc}");
+        throw;
+      }
     }
 
     public int CreateHousehold(string householdName)
@@ -200,19 +214,28 @@ namespace CrdsGoLocalApi.Services.Signup
 
     public int CreateGoLocalKids(int groupParticipantId, int kids2To7, int kids8To12)
     {
-      if (groupParticipantId != 0 && kids2To7 + kids8To12 > 0)
+      _logger.Info($"Creating GOLocal kids...");
+      try
       {
-        var goLocalKids = new GoLocalKids
+        if (groupParticipantId != 0 && kids2To7 + kids8To12 > 0)
         {
-          GroupParticipantId = groupParticipantId,
-          TwoToSeven = kids2To7,
-          EightToTwelve = kids8To12
-        };
+          var goLocalKids = new GoLocalKids
+          {
+            GroupParticipantId = groupParticipantId,
+            TwoToSeven = kids2To7,
+            EightToTwelve = kids8To12
+          };
 
-        goLocalKids.GoLocalKidsId = _participantDataRepository.CreateGoLocalKids(goLocalKids);
-        return goLocalKids.GoLocalKidsId;
+          goLocalKids.GoLocalKidsId = _participantDataRepository.CreateGoLocalKids(goLocalKids);
+          return goLocalKids.GoLocalKidsId;
+        }
+        return 0;
       }
-      return 0;
+      catch (Exception exc)
+      {
+        _logger.Error($"Failed to CreateGoLocalKids, exc: {exc}");
+        throw;
+      }
     }
 
     public int UpdateContact(int contactId, DateTime birthday, string mobilePhone)

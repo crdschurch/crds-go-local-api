@@ -25,6 +25,7 @@ namespace CrdsGoLocalApi.Controllers
     [Route("submit")]
     public IActionResult SignupVolunteer(VolunteerDTO volunteerData)
     {
+      _logger.Info($"Saving volunteer signup...");
       try
       {
         var success = _signupService.SignupUser(volunteerData);
