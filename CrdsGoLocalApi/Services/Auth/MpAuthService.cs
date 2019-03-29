@@ -10,7 +10,7 @@ namespace CrdsGoLocalApi.Services.Auth
   public class MpAuthService : IMpAuthService
   {
     private readonly IAuthTokenExpiryService _authTokenExpiryService;
-    protected readonly ILog Logger = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+    private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
     private readonly IAuthenticationRepository _authenticationRepository;
 
     public const string AuthorizationTokenHeaderName = "Authorization";
@@ -36,26 +36,37 @@ namespace CrdsGoLocalApi.Services.Auth
 
         bool isRefreshTokenPresent = context.Request.Headers.ContainsKey(RefreshTokenHeaderName);
 
+        if (context.Request.Path == "/api/signup/loggedin")
+        {
+          _logger.Info($"AuthToken: {context.Request.Headers[AuthorizationTokenHeaderName]}");
+          _logger.Info($"Refresh Token: {context.Request.Headers[RefreshTokenHeaderName]}");
+        }
         if (authTokenCloseToExpiry && isRefreshTokenPresent)
         {
           var authData = _authenticationRepository.RefreshToken(context.Request.Headers[RefreshTokenHeaderName]);
           if (authData != null)
           {
+            _logger.Info("Token Refreshed");
             var authorized = authData.AccessToken;
             var refreshToken = authData.RefreshToken;
 
             context.Request.Headers[AuthorizationTokenHeaderName] = authorized;
             context.Request.Headers[RefreshTokenHeaderName] = refreshToken;
 
-            context.Response.Headers.Add("Access-Control-Expose-Headers", new[] { AuthorizationTokenHeaderName, RefreshTokenHeaderName });
+            context.Response.Headers.Add("Access-Control-Expose-Headers",
+              new[] {AuthorizationTokenHeaderName, RefreshTokenHeaderName});
             context.Response.Headers.Add(AuthorizationTokenHeaderName, authorized);
             context.Response.Headers.Add(RefreshTokenHeaderName, refreshToken);
+          }
+          else
+          {
+            _logger.Info("Token Failed to Refresh");
           }
         }
       }
       catch (InvalidOperationException e)
       {
-        Logger.Error(e.Message, e);
+        _logger.Error(e.Message, e);
       }
 
       return context;
