@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Crossroads.Web.Auth.Controllers;
 using Crossroads.Web.Common.Security;
 using Crossroads.Web.Common.Services;
+using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Controllers
 {
@@ -26,6 +27,7 @@ namespace CrdsGoLocalApi.Controllers
     public IActionResult SignupVolunteer(VolunteerDTO volunteerData)
     {
       _logger.Info($"Saving volunteer signup...");
+      _logger.Info(JsonConvert.SerializeObject(volunteerData));
       try
       {
         var success = _signupService.SignupUser(volunteerData);
