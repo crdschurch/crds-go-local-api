@@ -53,8 +53,17 @@ namespace CrdsGoLocalApi.Controllers
     {
       return Authorized(authData =>
       {
-        var contact = _signupService.GetContactData(authData.UserInfo.Mp.ContactId);
-        return Ok(contact);
+        try
+        {
+          _logger.Info($"Looking up Contact data for {authData.UserInfo.Mp.ContactId}");
+          var contact = _signupService.GetContactData(authData.UserInfo.Mp.ContactId);
+          return Ok(contact);
+        }
+        catch (Exception ex)
+        {
+          _logger.Error(ex, $"Error getting data for user {authData.UserInfo.Mp.ContactId}");
+          return Unauthorized();
+        }
       });
     }
   }
