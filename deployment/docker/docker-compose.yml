@@ -11,6 +11,7 @@ services:
     ports:
       - "5000:80" 
     environment: 
+      - AUTH_SERVICE_BASE_URL=${AUTH_SERVICE_BASE_URL:-https://api-int.crossroads.net/auth}
       - CRDS_EMBED_ENV=${CRDS_EMBED_ENV:-int} 
       - CRDS_ENV=${CRDS_ENV:-int} 
       - CRDS_WEB=${CRDS_WEB:-https://int.crossroads.net} 
