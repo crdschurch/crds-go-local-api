@@ -51,7 +51,10 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         .AddSelectColumn("Group_ID")
         .AddSelectColumn("Initiative_ID_Table.Event_ID AS Initiative_Event_ID")
         .RestrictResultCount(0)
-        .WithFilter($"Initiative_ID_Table.Volunteer_Signup_Start_Date <= '{now}' AND Initiative_ID_Table.Volunteer_Signup_End_Date >= '{now}' AND cr_Projects.Project_Status_ID <> 2")
+        .WithFilter($"Initiative_ID_Table.Volunteer_Signup_Start_Date <= '{now}' " +
+                    $"AND Initiative_ID_Table.Volunteer_Signup_End_Date >= '{now}' " +
+                    $"AND cr_Projects.Project_Status_ID " +
+                      $"IN ({ProjectStatusIds.ACTIVE}, {ProjectStatusIds.CLOSED_FOR_SIGNUPS})")
         .Build()
         .Search<MpProject>("cr_Projects");
       _logger.Info($"Got back {projects.Count} projects");
@@ -91,34 +94,42 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
 
     public MpProject GetProject(int projectId)
     {
-      var apiToken = _tokenService.GetClientToken();
-      var project = _ministryPlatformBuilder.NewRequestBuilder()
-        .WithAuthenticationToken(apiToken)
-        .AddSelectColumn("Project_ID")
-        .AddSelectColumn("Project_Name")
-        .AddSelectColumn("Project_Description")
-        .AddSelectColumn("Project_Status_ID_Table.Project_Status_ID")
-        .AddSelectColumn("Organization_ID_Table.Name AS Organization_Name")
-        .AddSelectColumn("Project_Type_ID_Table.Description AS Project_Type_Description")
-        .AddSelectColumn("Project_Type_ID_Table.Minimum_Age AS Project_Type_Min_Age")
-        .AddSelectColumn("Minimum_Age_Exception")
-        .AddSelectColumn("Location_ID_Table.Location_Name")
-        .AddSelectColumn("Minimum_Volunteers")
-        .AddSelectColumn("Maximum_Volunteers")
-        .AddSelectColumn("Address_ID_Table.Address_Line_1")
-        .AddSelectColumn("Address_ID_Table.Address_Line_2")
-        .AddSelectColumn("Address_ID_Table.City AS Address_City")
-        .AddSelectColumn("Address_ID_Table.[State/Region] AS Address_State")
-        .AddSelectColumn("Address_ID_Table.Postal_Code AS Address_Zip")
-        .AddSelectColumn("Address_ID_Table.Latitude AS Address_Lat")
-        .AddSelectColumn("Address_ID_Table.Longitude AS Address_Long")
-        .AddSelectColumn("cr_Projects.Start_Date")
-        .AddSelectColumn("cr_Projects.End_Date")
-        .AddSelectColumn("Group_ID")
-        .AddSelectColumn("Initiative_ID_Table.Event_ID AS Initiative_Event_ID")
-        .Build()
-        .Get<MpProject>(projectId);
-      return project;
+      _logger.Info($"Getting project by id {projectId}");
+      try
+      {
+        var apiToken = _tokenService.GetClientToken();
+        var project = _ministryPlatformBuilder.NewRequestBuilder()
+          .WithAuthenticationToken(apiToken)
+          .AddSelectColumn("Project_ID")
+          .AddSelectColumn("Project_Name")
+          .AddSelectColumn("Project_Description")
+          .AddSelectColumn("Project_Status_ID_Table.Project_Status_ID")
+          .AddSelectColumn("Organization_ID_Table.Name AS Organization_Name")
+          .AddSelectColumn("Project_Type_ID_Table.Description AS Project_Type_Description")
+          .AddSelectColumn("Project_Type_ID_Table.Minimum_Age AS Project_Type_Min_Age")
+          .AddSelectColumn("Minimum_Age_Exception")
+          .AddSelectColumn("Location_ID_Table.Location_Name")
+          .AddSelectColumn("Minimum_Volunteers")
+          .AddSelectColumn("Maximum_Volunteers")
+          .AddSelectColumn("Address_ID_Table.Address_Line_1")
+          .AddSelectColumn("Address_ID_Table.Address_Line_2")
+          .AddSelectColumn("Address_ID_Table.City AS Address_City")
+          .AddSelectColumn("Address_ID_Table.[State/Region] AS Address_State")
+          .AddSelectColumn("Address_ID_Table.Postal_Code AS Address_Zip")
+          .AddSelectColumn("Address_ID_Table.Latitude AS Address_Lat")
+          .AddSelectColumn("Address_ID_Table.Longitude AS Address_Long")
+          .AddSelectColumn("cr_Projects.Start_Date")
+          .AddSelectColumn("cr_Projects.End_Date")
+          .AddSelectColumn("Group_ID")
+          .AddSelectColumn("Initiative_ID_Table.Event_ID AS Initiative_Event_ID")
+          .Build()
+          .Get<MpProject>(projectId);
+        return project;
+      }
+      catch (Exception exc) {
+        _logger.Error($"Failed to get project, exc: {exc}");
+        throw;
+      }
     }
   }
 }

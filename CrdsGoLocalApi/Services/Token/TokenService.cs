@@ -18,15 +18,11 @@ namespace CrdsGoLocalApi.Services.Token
 
     public string GetClientToken()
     {
-      _logger.Info("Attempting to get a client token...");
-
       try
       {
         string token = _cache.GetOrSet<string>("token",
         TimeSpan.FromMinutes(29),
         () => _apiRepo.GetApiClientToken("CRDS.GOLocal"));
-
-        _logger.Info($"Got client token {token}");
 
         return token;
       }

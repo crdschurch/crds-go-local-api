@@ -1,6 +1,7 @@
 ﻿using System;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Repositories.ContactData;
+using CrdsGoLocalApi.Repositories.Email;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
@@ -14,6 +15,7 @@ namespace CrdsGoLocalApi.Tests.Services
   public class SignupServiceTests : IDisposable
   {
     private readonly Mock<IContactDataRepository> _contactDataRepository;
+    private readonly Mock<IEmailRepository> _emailRepository;
     private readonly Mock<IHouseholdDataRepository> _householdDataRepository;
     private readonly Mock<IParticipantDataRepository> _participantDataRepository;
     private readonly Mock<IProjectDataRepository> _projectDataRepository;
@@ -23,15 +25,17 @@ namespace CrdsGoLocalApi.Tests.Services
     public SignupServiceTests()
     {
       _contactDataRepository = new Mock<IContactDataRepository>();
+      _emailRepository = new Mock<IEmailRepository>();
       _householdDataRepository = new Mock<IHouseholdDataRepository>();
       _participantDataRepository = new Mock<IParticipantDataRepository>();
       _projectDataRepository = new Mock<IProjectDataRepository>();
-      _fixture = new SignupService(_contactDataRepository.Object, _householdDataRepository.Object, _participantDataRepository.Object, _projectDataRepository.Object);
+      _fixture = new SignupService(_contactDataRepository.Object, _emailRepository.Object, _householdDataRepository.Object, _participantDataRepository.Object, _projectDataRepository.Object);
     }
 
     public void Dispose()
     {
       _contactDataRepository.VerifyAll();
+      _emailRepository.VerifyAll();
       _householdDataRepository.VerifyAll();
       _participantDataRepository.VerifyAll();
       _projectDataRepository.VerifyAll();
@@ -49,6 +53,7 @@ namespace CrdsGoLocalApi.Tests.Services
       _participantDataRepository.Setup(m => m.CreateGroupParticipant(It.IsAny<GroupParticipant>())).Returns(3456);
       _participantDataRepository.Setup(m => m.CreateEventParticipant(It.IsAny<EventParticipant>())).Returns(7890);
       _participantDataRepository.Setup(m => m.CreateGoLocalKids(It.IsAny<GoLocalKids>())).Returns(1357);
+      _emailRepository.Setup(m => m.SendConfirmationEmail(It.IsAny<MpProject>(), It.IsAny<VolunteerDTO>(), 1234)).Returns(true);
 
       var result = _fixture.SignupUser(signupData);
 
@@ -66,6 +71,7 @@ namespace CrdsGoLocalApi.Tests.Services
       _participantDataRepository.Setup(m => m.CreateParticipant(It.IsAny<Participant>())).Returns(9012);
       _participantDataRepository.Setup(m => m.CreateGroupParticipant(It.IsAny<GroupParticipant>())).Returns(3456);
       _participantDataRepository.Setup(m => m.CreateEventParticipant(It.IsAny<EventParticipant>())).Returns(7890);
+      _emailRepository.Setup(m => m.SendConfirmationEmail(It.IsAny<MpProject>(), It.IsAny<VolunteerDTO>(), 1234)).Returns(true);
 
       var result = _fixture.SignupUser(signupData);
 
