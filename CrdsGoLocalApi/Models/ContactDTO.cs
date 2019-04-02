@@ -21,6 +21,6 @@ namespace CrdsGoLocalApi.Models
     public string PhoneNumber { get; set; }
 
     [JsonProperty(PropertyName = "dob")]
-    public DateTime BirthDate { get; set; }
+    public DateTime? BirthDate { get; set; }
   }
 }
