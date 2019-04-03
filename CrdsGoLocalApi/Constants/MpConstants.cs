@@ -8,5 +8,6 @@
     public static readonly int ActiveContactStatus = 1;
     public static readonly int HeadOfHousehold = 1;
     public static readonly int ConfirmationEmailTemplate = 169909;
+    public static readonly int GoLocalEmailRoleId = 212;
   }
 }

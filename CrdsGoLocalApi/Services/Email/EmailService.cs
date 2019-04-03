@@ -21,5 +21,10 @@ namespace CrdsGoLocalApi.Services.Email
 
       return styledAttendeeList;
     }
+
+    public int SendProjectLeaderEmails(int initiativeId)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

@@ -6,5 +6,6 @@ namespace CrdsGoLocalApi.Services.Email
   public interface IEmailService
   {
     string CreateStyledAttendeeList(VolunteerDTO volunteerData);
+    int SendProjectLeaderEmails(int initiativeId);
   }
 }
