@@ -1,7 +1,11 @@
-﻿using CrdsGoLocalApi.Repositories.ContactData;
+﻿using CrdsGoLocalApi.Middleware;
+using CrdsGoLocalApi.Repositories.ContactData;
+using CrdsGoLocalApi.Repositories.Email;
+using CrdsGoLocalApi.Repositories.GroupData;
 using CrdsGoLocalApi.Repositories.HouseholdData;
 using CrdsGoLocalApi.Repositories.ParticipantData;
 using CrdsGoLocalApi.Repositories.ProjectData;
+using CrdsGoLocalApi.Services.Auth;
 using CrdsGoLocalApi.Services.Cache;
 using CrdsGoLocalApi.Services.Project;
 using Crossroads.Microservice.Settings;
@@ -15,6 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
+using CrdsGoLocalApi.Services.Email;
 
 namespace CrdsGoLocalApi
 {
@@ -47,7 +52,11 @@ namespace CrdsGoLocalApi
       CrossroadsWebCommonConfig.Register(services);
       services.AddSingleton<ICacheService, CacheService>();
       services.AddSingleton<IContactDataRepository, ContactDataRepository>();
+      services.AddSingleton<IEmailRepository, EmailRepository>();
+      services.AddSingleton<IEmailService, EmailService>();
+      services.AddSingleton<IGroupDataRepository, GroupDataRepository>();
       services.AddSingleton<IHouseholdDataRepository, HouseholdDataRepository>();
+      services.AddSingleton<IMpAuthService, MpAuthService>();
       services.AddSingleton<IParticipantDataRepository, ParticipantDataRepository>();
       services.AddSingleton<IProjectDataRepository, ProjectDataRepository>();
       services.AddSingleton<IProjectService, ProjectService>();
@@ -114,6 +123,7 @@ namespace CrdsGoLocalApi
         });
       }
 
+      app.UseUserAuthorizationTokenMiddleware();
       app.UseHttpsRedirection();
       app.UseMvc();
     }

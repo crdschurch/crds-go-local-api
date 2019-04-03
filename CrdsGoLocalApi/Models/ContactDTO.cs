@@ -3,8 +3,11 @@ using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Models
 {
-  public class GuestContact
+  public class ContactDTO
   {
+    [JsonProperty(PropertyName = "contactId")]
+    public int ContactId { get; set; }
+
     [JsonProperty(PropertyName = "firstName")]
     public string FirstName { get; set; }
 
@@ -14,10 +17,10 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "email")]
     public string Email { get; set; }
 
-    [JsonProperty(PropertyName = "dob")]
-    public DateTime BirthDate { get; set; }
+    [JsonProperty(PropertyName = "mobilePhoneNumber")]
+    public string PhoneNumber { get; set; }
 
-    [JsonProperty(PropertyName = "householdPositionId")]
-    public int? HouseholdPositionId { get; set; }
+    [JsonProperty(PropertyName = "dob")]
+    public DateTime? BirthDate { get; set; }
   }
 }

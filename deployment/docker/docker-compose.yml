@@ -11,13 +11,14 @@ services:
     ports:
       - "5000:80" 
     environment: 
+      - AUTH_SERVICE_BASE_URL=${AUTH_SERVICE_BASE_URL:-https://api-int.crossroads.net/auth}
       - CRDS_EMBED_ENV=${CRDS_EMBED_ENV:-int} 
       - CRDS_ENV=${CRDS_ENV:-int} 
       - CRDS_WEB=${CRDS_WEB:-https://int.crossroads.net} 
       - CRDS_MP_COMMON_CLIENT_ID=${CRDS_MP_COMMON_CLIENT_ID}
       - CRDS_MP_COMMON_CLIENT_SECRET=${CRDS_MP_COMMON_CLIENT_SECRET} 
       - MP_REST_API_ENDPOINT=${MP_REST_API_ENDPOINT:-https://adminint.crossroads.net/ministryplatformapi} 
-      - MP_OAUTH_BASE_URL=${MP_OAUTH_BASE_URL:-https://adminint.crossroads.net/ministryplatform/oauth} 
+      - MP_OAUTH_BASE_URL=${MP_OAUTH_BASE_URL:-https://adminint.crossroads.net/ministryplatformapi/oauth} 
       - API_USER=${API_USER}
       - API_PASSWORD=${API_PASSWORD}
       - ASTRONOMER_APPLICATION_ID=${ASTRONOMER_APPLICATION_ID}
