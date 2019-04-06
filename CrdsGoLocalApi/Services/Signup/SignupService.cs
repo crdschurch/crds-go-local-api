@@ -277,7 +277,7 @@ namespace CrdsGoLocalApi.Services.Signup
       return household.FirstOrDefault(h =>
         h.FirstName == guest.FirstName &&
         h.LastName == guest.LastName &&
-        h.DateOfBirth.Date == guest.BirthDate.Date)?.ContactId;
+        h.DateOfBirth?.Date == guest.BirthDate.Date)?.ContactId;
     }
   }
 }
