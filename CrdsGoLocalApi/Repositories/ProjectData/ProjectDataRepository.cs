@@ -85,7 +85,9 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         .WithAuthenticationToken(apiToken)
         .AddSelectColumn("Group_ID")
         .AddSelectColumn("Participant_ID_Table_Contact_ID_Table.Nickname + ' ' + Participant_ID_Table_Contact_ID_Table.Last_Name AS 'Leader_Name'")
-        .WithFilter($"Group_ID IN ({idList}) AND Group_Role_ID_Table.[Group_Role_ID] = 22")
+        .WithFilter($"Group_ID IN ({idList}) " +
+                    $"AND Group_Role_ID_Table.[Group_Role_ID] = 22 " +
+                    $"AND (End_Date IS NULL OR End_Date > GETDATE())")
         .RestrictResultCount(0)
         .Build()
         .SearchViaPost<ProjectLeaders>("Group_Participants");
