@@ -21,7 +21,43 @@ namespace CrdsGoLocalApi.Services.EmailHelper
 
     public string FormatProjectVolunteerList(List<GroupMembers> volunteers)
     {
-      return "";
+      string projVolunteerTableHtml = $@"
+        <table class = 'bodyContent' style = 'width: 100%'>
+           {GetHeaderRow()}
+           {GetVolunteerInfoRows(volunteers)};
+        </table>";
+
+      return projVolunteerTableHtml;
+    }
+
+    public string GetVolunteerInfoRows(List<GroupMembers> volunteers) {
+      string volInfoRows = "";
+
+      foreach (GroupMembers vol in volunteers) {
+        volInfoRows += GetIndividualVolunteerInfoRow(vol);
+      }
+
+      return volInfoRows;
+    }
+
+    private string GetHeaderRow() {
+      return @"<tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Kids Age 2-7</th>
+                <th>Kids Age 8-12</th>
+              </tr>";
+    }
+
+    private string GetIndividualVolunteerInfoRow(GroupMembers vol) {
+      return $@"<tr>
+          <th>{vol.FirstName} {vol.LastName}</th>
+          <th>{vol.EmailAddress}</th>
+          <th>{vol.MobilePhone}</th>
+          <th>{vol.KidsAttending?.TwoToSeven ?? 0}</th>
+          <th>{vol.KidsAttending?.EightToTwelve ?? 0}</th>
+        </tr>";
     }
   }
 }
