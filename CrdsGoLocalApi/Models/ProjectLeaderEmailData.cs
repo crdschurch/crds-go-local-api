@@ -1,4 +1,6 @@
-﻿namespace CrdsGoLocalApi.Models
+﻿using System.Collections.Generic;
+
+namespace CrdsGoLocalApi.Models
 {
   public class ProjectLeaderEmailData
   {
@@ -10,5 +12,6 @@
     public string ProjectGroupContactFirstName { get; set; }
     public string ProjectGroupContactLastName { get; set; }
     public int ProjectGroupContactId { get; set; }
+    public List<GroupMembers> Volunteers { get; set; }
   }
 }

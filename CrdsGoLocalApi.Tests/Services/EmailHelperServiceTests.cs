@@ -1,19 +1,17 @@
 ﻿using CrdsGoLocalApi.Models;
-using CrdsGoLocalApi.Services.Email;
-using System;
 using System.Collections.Generic;
-using System.Text;
+using CrdsGoLocalApi.Services.EmailHelper;
 using Xunit;
 
 namespace CrdsGoLocalApi.Tests.Services
 {
-  public class EmailServiceTests
+  public class EmailHelperServiceTests
   {
-    private readonly EmailService _fixture;
+    private readonly EmailHelperService _fixture;
 
-    public EmailServiceTests()
+    public EmailHelperServiceTests()
     {
-      _fixture = new EmailService();
+      _fixture = new EmailHelperService();
     }
 
     [Fact]

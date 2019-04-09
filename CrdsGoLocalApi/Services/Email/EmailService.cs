@@ -1,30 +1,56 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using CrdsGoLocalApi.Models;
-using System.Collections.Generic;
+using CrdsGoLocalApi.Constants;
+using CrdsGoLocalApi.Repositories.Email;
+using CrdsGoLocalApi.Repositories.GroupData;
+using CrdsGoLocalApi.Repositories.ProjectData;
 
 namespace CrdsGoLocalApi.Services.Email
 {
   public class EmailService : IEmailService
   {
-    public EmailService() {}
+    private readonly IEmailRepository _emailRepository;
+    private readonly IGroupDataRepository _groupDataRepository;
+    private readonly IProjectDataRepository _projectDataRepository;
 
-    public string CreateStyledAttendeeList(VolunteerDTO volunteerData)
+    public EmailService(IEmailRepository emailRepo, IGroupDataRepository groupData, IProjectDataRepository projectData)
     {
-      List<string> attendeeNames = volunteerData.Guests.Select(g => $"{g.FirstName} {g.LastName}").ToList();
-      attendeeNames.Insert(0, $"{volunteerData.FirstName} {volunteerData.LastName}");
-
-      string styledAttendeeList = 
-        "<div style=\"margin-left: 40px\">"
-        + string.Join("<br>", attendeeNames)
-        + "</div>";
-
-      return styledAttendeeList;
+      _emailRepository = emailRepo;
+      _groupDataRepository = groupData;
+      _projectDataRepository = projectData;
     }
 
     public int SendProjectLeaderEmails(int initiativeId)
     {
-      throw new NotImplementedException();
+      var sentEmails = 0;
+      var projects = _projectDataRepository.GetProjectReminderData(initiativeId);
+      foreach (var project in projects)
+      {
+        var groupMembers = _groupDataRepository.GetGroupMembers(project.GroupId.Value);
+        var volunteers = groupMembers.Where(v => v.RoleId == MpConstants.GroupMemberRoleId).ToList();
+        foreach (var leader in groupMembers.Where(v => v.RoleId == MpConstants.GroupLeaderRoleId))
+        {
+          var group = _groupDataRepository.GetGroup(project.GroupId.Value);
+          var newEmailData = new ProjectLeaderEmailData
+          {
+            ProjectName = project.ProjectName,
+            Organization = project.OrgName,
+            ProjectGroupContactId = group.PrimaryContactId,
+            ProjectGroupContactFirstName = group.PrimaryContactFirstName,
+            ProjectGroupContactLastName = group.PrimaryContactLastName,
+            ProjectLeaderContactId = leader.ContactId,
+            ProjectLeaderFirstName = leader.FirstName,
+            ProjectLeaderLastName = leader.LastName,
+            Volunteers = volunteers
+          };
+          var sent = _emailRepository.SendProjectLeaderEmail(newEmailData);
+          if (sent)
+          {
+            sentEmails++;
+          }
+        }
+      }
+      return sentEmails;
     }
   }
 }

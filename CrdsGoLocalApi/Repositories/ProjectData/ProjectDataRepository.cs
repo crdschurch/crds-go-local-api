@@ -131,5 +131,32 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         throw;
       }
     }
+
+    public List<MpProjectReminder> GetProjectReminderData(int initiativeId)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      var projects = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .AddSelectColumn("Project_ID")
+        .AddSelectColumn("Project_Name")
+        .AddSelectColumn("Project_Description")
+        .AddSelectColumn("Organization_ID_Table.[Name] AS [Organization_Name]")
+        .AddSelectColumn("Project_Type_ID_Table.[Description] AS [Project_Type_Description]")
+        .AddSelectColumn("Address_ID_Table.Address_Line_1 AS [Address_Line_1]")
+        .AddSelectColumn("Address_ID_Table.[Address_Line_2] AS [Address_Line_2]")
+        .AddSelectColumn("Address_ID_Table.[City] AS [Address_City]")
+        .AddSelectColumn("Address_ID_Table.[State/Region] AS [Address_State]")
+        .AddSelectColumn("Address_ID_Table.[Postal_Code] AS [Address_Zip]")
+        .AddSelectColumn("cr_Projects.Start_Date AS Start_Date")
+        .AddSelectColumn("cr_Projects.End_Date AS End_Date")
+        .AddSelectColumn("Group_ID_Table.[Group_ID] AS [Group_ID]")
+        .AddSelectColumn("Note_To_Volunteers_1")
+        .AddSelectColumn("Project_Parking_Location")
+        .WithFilter($"Initiative_ID = {initiativeId}")
+        .RestrictResultCount(0)
+        .Build()
+        .Search<MpProjectReminder>();
+      return projects;
+    }
   }
 }

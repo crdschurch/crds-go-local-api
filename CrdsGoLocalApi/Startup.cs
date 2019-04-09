@@ -20,6 +20,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Swashbuckle.AspNetCore.Swagger;
 using CrdsGoLocalApi.Services.Email;
+using CrdsGoLocalApi.Services.EmailHelper;
 
 namespace CrdsGoLocalApi
 {
@@ -52,6 +53,7 @@ namespace CrdsGoLocalApi
       CrossroadsWebCommonConfig.Register(services);
       services.AddSingleton<ICacheService, CacheService>();
       services.AddSingleton<IContactDataRepository, ContactDataRepository>();
+      services.AddSingleton<IEmailHelperService, EmailHelperService>();
       services.AddSingleton<IEmailRepository, EmailRepository>();
       services.AddSingleton<IEmailService, EmailService>();
       services.AddSingleton<IGroupDataRepository, GroupDataRepository>();
