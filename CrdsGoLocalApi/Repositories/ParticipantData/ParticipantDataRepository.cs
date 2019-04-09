@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using CrdsGoLocalApi.Models;
+﻿using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Services.Token;
 using Crossroads.Web.Common.MinistryPlatform;
 using Newtonsoft.Json.Linq;

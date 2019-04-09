@@ -7,5 +7,6 @@ namespace CrdsGoLocalApi.Repositories.GroupData
   {
     Group GetGroup(int groupId);
     List<GroupMembers> GetGroupMembers(int groupId);
+    List<GoLocalKids> GetGoLocalKidsForProject(int groupId);
   }
 }
