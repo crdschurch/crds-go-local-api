@@ -24,7 +24,7 @@ namespace CrdsGoLocalApi.Services.EmailHelper
       string projVolunteerTableHtml = $@"
         <table class = 'bodyContent' style = 'width: 100%'>
            {GetHeaderRow()}
-           {GetVolunteerInfoRows(volunteers)};
+           {GetVolunteerInfoRows(volunteers)}
         </table>";
 
       return projVolunteerTableHtml;
