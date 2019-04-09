@@ -27,7 +27,14 @@ namespace CrdsGoLocalApi.Services.Email
       foreach (var project in projects)
       {
         var groupMembers = _groupDataRepository.GetGroupMembers(project.GroupId.Value);
+        var groupMembersKids = _groupDataRepository.GetGoLocalKidsForProject(project.GroupId.Value);
         var volunteers = groupMembers.Where(v => v.RoleId == MpConstants.GroupMemberRoleId).ToList();
+
+        foreach (var vol in volunteers)
+        {
+          vol.KidsAttending = groupMembersKids.FirstOrDefault(k => k.GroupParticipantId == vol.GroupParticipantId);
+        }
+
         foreach (var leader in groupMembers.Where(v => v.RoleId == MpConstants.GroupLeaderRoleId))
         {
           var group = _groupDataRepository.GetGroup(project.GroupId.Value);

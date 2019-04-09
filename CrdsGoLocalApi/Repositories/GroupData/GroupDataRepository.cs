@@ -47,5 +47,16 @@ namespace CrdsGoLocalApi.Repositories.GroupData
         .Search<GroupMembers>();
       return members;
     }
+
+    public List<GoLocalKids> GetGoLocalKidsForProject(int groupId)
+    {
+      var apiToken = _tokenService.GetClientToken();
+      var kiddos = _ministryPlatformBuilder.NewRequestBuilder()
+        .WithAuthenticationToken(apiToken)
+        .WithFilter($"Group_Participant_ID_Table.Group_ID = {groupId}")
+        .Build()
+        .Search<GoLocalKids>();
+      return kiddos;
+    }
   }
 }
