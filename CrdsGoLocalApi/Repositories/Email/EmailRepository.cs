@@ -56,7 +56,7 @@ namespace CrdsGoLocalApi.Repositories.Email
           {"Project_Name", emailData.ProjectName },
           {"Organization", emailData.Organization },
           {"Project_Leader", $"{emailData.ProjectLeaderFirstName} {emailData.ProjectLeaderLastName}" },
-          {"Volunteer_List", "" }, // TODO: Populate this.
+          {"Volunteer_List", _emailHelperService.FormatProjectVolunteerList(emailData.Volunteers) },
           {"Project_Group_Contact_First_Name", emailData.ProjectGroupContactFirstName },
           {"Project_Group_Contact_Last_Name", emailData.ProjectGroupContactLastName }
         }

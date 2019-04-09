@@ -12,7 +12,7 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "Contact_ID")]
     public int ContactId { get; set; }
 
-  [JsonProperty(PropertyName = "Group_Role_ID")]
+    [JsonProperty(PropertyName = "Group_Role_ID")]
     public int RoleId { get; set; }
 
     [JsonProperty(PropertyName = "First_Name")]
@@ -26,5 +26,7 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "Mobile_Phone")]
     public string MobilePhone { get; set; }
+
+    public GoLocalKids KidsAttending { get; set; }
   }
 }
