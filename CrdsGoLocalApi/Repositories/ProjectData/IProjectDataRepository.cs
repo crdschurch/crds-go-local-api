@@ -9,5 +9,6 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
     List<GroupCount> GetGroupParticipantCounts(List<int> groupIds);
     List<ProjectLeaders> GetProjectLeaders(List<int> groupIds);
     MpProject GetProject(int projectId);
+    List<MpProjectReminder> GetProjectReminderData(int initiativeId);
   }
 }
