@@ -11,5 +11,11 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "Primary_Contact")]
     public int PrimaryContactId { get; set; }
+
+    [JsonProperty(PropertyName = "Primary_Contact_First_Name")]
+    public string PrimaryContactFirstName { get; set; }
+
+    [JsonProperty(PropertyName = "Primary_Contact_Last_Name")]
+    public string PrimaryContactLastName { get; set; }
   }
 }
