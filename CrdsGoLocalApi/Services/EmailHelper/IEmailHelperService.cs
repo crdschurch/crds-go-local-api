@@ -5,7 +5,7 @@ namespace CrdsGoLocalApi.Services.EmailHelper
 {
   public interface IEmailHelperService
   {
-    string FormatProjectVolunteerList(List<GroupMembers> volunteers);
+    string FormatProjectVolunteerList(List<GroupMember> volunteers);
     string CreateStyledAttendeeList(VolunteerDTO volunteerData);
   }
 }

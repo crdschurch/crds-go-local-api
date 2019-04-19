@@ -19,7 +19,7 @@ namespace CrdsGoLocalApi.Services.EmailHelper
       return styledAttendeeList;
     }
 
-    public string FormatProjectVolunteerList(List<GroupMembers> volunteers)
+    public string FormatProjectVolunteerList(List<GroupMember> volunteers)
     {
       string projVolunteerTableHtml = $@"
         <table class = 'bodyContent' style = 'width: 100%'>
@@ -30,10 +30,10 @@ namespace CrdsGoLocalApi.Services.EmailHelper
       return projVolunteerTableHtml;
     }
 
-    public string GetVolunteerInfoRows(List<GroupMembers> volunteers) {
+    public string GetVolunteerInfoRows(List<GroupMember> volunteers) {
       string volInfoRows = "";
 
-      foreach (GroupMembers vol in volunteers) {
+      foreach (GroupMember vol in volunteers) {
         volInfoRows += GetIndividualVolunteerInfoRow(vol);
       }
 
@@ -50,7 +50,7 @@ namespace CrdsGoLocalApi.Services.EmailHelper
               </tr>";
     }
 
-    private string GetIndividualVolunteerInfoRow(GroupMembers vol) {
+    private string GetIndividualVolunteerInfoRow(GroupMember vol) {
       return $@"<tr>
           <th>{vol.FirstName} {vol.LastName}</th>
           <th>{vol.EmailAddress}</th>
