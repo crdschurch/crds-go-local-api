@@ -64,5 +64,28 @@ namespace CrdsGoLocalApi.Repositories.Email
       var sent = _emailSender.SendEmail(email, false).Result;
       return sent;
     }
+
+    public bool SendVolunteerReminderEmail(VolunteerReminderEmailData emailData)
+    {
+      var email = new EmailCommunication{
+        ToContactId = new List<int> { emailData.ProjectGroupContactId },
+        FromContactId = emailData.ProjectGroupContactId,
+        SenderContactId = emailData.ProjectGroupContactId,
+        TemplateId = MpConstants.ProjectVolunteerReminderTemplate,
+        MergeData = new Dictionary<string, object>
+        {
+          {"Project_Name", emailData.ProjectName },
+          {"Organization", emailData.Organization },
+          {"Project_Description", emailData.ProjectDescription },
+          {"Project_Address", emailData.ProjectAddress},
+          {"Project_Parking_Location", emailData.ProjectParkingLocation },
+          {"Project_Leader_Names", emailData.ProjectLeaderNames },
+          {"Project_Group_Contact_First_Name", emailData.ProjectGroupContactFirstName },
+          {"Project_Group_Contact_Last_Name", emailData.ProjectGroupContactLastName }
+        }
+      };
+      var sent = _emailSender.SendEmail(email, false).Result;
+      return sent;
+    }
   }
 }

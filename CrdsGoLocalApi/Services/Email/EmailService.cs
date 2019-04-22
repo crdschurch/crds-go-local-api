@@ -80,10 +80,11 @@ namespace CrdsGoLocalApi.Services.Email
       int sentEmailsCount = 0;
 
       List<GroupMember> groupMembers = _groupDataRepository.GetGroupMembers(project.GroupId.Value);
-      List<GroupMember> volunteers = GetVolunteersAndTheirKidInformation(project.GroupId.Value, groupMembers);
+      List<GroupMember> selfRegisteredVols = GetSelfRegisteredVolsAndTheirKidInformation(project.GroupId.Value, 
+                                                                                         groupMembers);
       List<GroupMember> leaders = groupMembers.Where(gm => gm.RoleId == MpConstants.GroupLeaderRoleId).ToList();
 
-      foreach (var vol in volunteers)
+      foreach (var vol in selfRegisteredVols)
       {
         var group = _groupDataRepository.GetGroup(project.GroupId.Value);
         bool wasSent = SendVolunteerReminderEmail(project, leaders, vol, group);
@@ -98,32 +99,72 @@ namespace CrdsGoLocalApi.Services.Email
                                             GroupMember vol, 
                                             Group group)
     {
-      var newEmailData = new ProjectLeaderEmailData
+      var newEmailData = new VolunteerReminderEmailData
       {
         ProjectName = project.ProjectName,
         Organization = project.OrgName,
         ProjectGroupContactId = group.PrimaryContactId,
         ProjectGroupContactFirstName = group.PrimaryContactFirstName,
         ProjectGroupContactLastName = group.PrimaryContactLastName,
+        ProjectAddress = $"{project.Address1} {project.Address2} {project.AddressCity}, " +
+                         $"{project.AddressState} {project.AddressZip}",
+        ProjectParkingLocation = GetParkingLocationOrDefaultMsg(project.ParkingLocation),
         ProjectLeaderContactId = vol.ContactId,
-        ProjectLeaderFirstName = vol.FirstName,
-        ProjectLeaderLastName = vol.LastName,
-        //Volunteers = volunteers
+        ProjectLeaderNames = GetProjectLeaderInfoHtmlString(leaders),
+        ProjectDescription = project.ProjectDescription
       };
-      var sent = _emailRepository.SendProjectLeaderEmail(newEmailData);
+      var sent = _emailRepository.SendVolunteerReminderEmail(newEmailData);
       return sent;
     }
 
-    private List<GroupMember> GetVolunteersAndTheirKidInformation(int groupId, List<GroupMember> groupMembers) {
-      List<GoLocalKids> groupMembersKids = _groupDataRepository.GetGoLocalKidsForProject(groupId);
-      List<GroupMember> volunteers = groupMembers.Where(v => v.RoleId == MpConstants.GroupMemberRoleId).ToList();
+    private string GetProjectLeaderInfoHtmlString(List<GroupMember> leaders) {
+      List<string> leaderInfoStrings = leaders
+        .Select(l => $"{l.FirstName} {l.LastName} {l.EmailAddress} {l.MobilePhone}")
+        .ToList();
 
-      foreach (var vol in volunteers)
+      string leaderOneInfo = leaderInfoStrings.First();
+      string leaderTwoInfoOrPlaceholder = GetLeaderTwoOrPlaceholder(leaderInfoStrings);
+
+      string leaderInfoHtml = $"{leaderOneInfo}<br>{leaderTwoInfoOrPlaceholder}";
+
+      return leaderInfoHtml;
+
+    }
+
+    private string GetLeaderTwoOrPlaceholder(List<string> leadersInfo) {
+      bool hasMoreThanOneLeader = leadersInfo.Count() > 1;
+
+      string leaderTwoOrPlaceholder = hasMoreThanOneLeader ?
+        leadersInfo[1] :
+        "This is an awesome leader. Can't wait for you to serve together.";
+
+      return leaderTwoOrPlaceholder;
+    }
+
+    private string GetParkingLocationOrDefaultMsg(string parkingLocation) {
+      bool isMissing = string.IsNullOrWhiteSpace(parkingLocation);
+      if (isMissing) {
+        return "anywhere you can find. There are no specific parking instructions.";
+      }
+
+      return parkingLocation;
+    }
+
+    private List<GroupMember> GetSelfRegisteredVolsAndTheirKidInformation(int groupId, List<GroupMember> groupMembers) {
+
+      List<GroupMember> selfRegisteredNonLeaderVolunteers = 
+        groupMembers.Where(v => string.IsNullOrEmpty(v.EnrolledBy) 
+                        && v.RoleId == MpConstants.GroupMemberRoleId)
+                    .ToList();
+
+      List<GoLocalKids> groupMembersKids = _groupDataRepository.GetGoLocalKidsForProject(groupId);
+
+      foreach (var vol in selfRegisteredNonLeaderVolunteers)
       {
         vol.KidsAttending = groupMembersKids.FirstOrDefault(k => k.GroupParticipantId == vol.GroupParticipantId);
       }
 
-      return groupMembers;
+      return selfRegisteredNonLeaderVolunteers;
     }
   }
 }

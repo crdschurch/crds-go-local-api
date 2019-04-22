@@ -6,5 +6,6 @@ namespace CrdsGoLocalApi.Repositories.Email
   {
     bool SendConfirmationEmail(MpProject projectData, VolunteerDTO volunteerData, int toContactId);
     bool SendProjectLeaderEmail(ProjectLeaderEmailData emailData);
+    bool SendVolunteerReminderEmail(VolunteerReminderEmailData emailData);
   }
 }

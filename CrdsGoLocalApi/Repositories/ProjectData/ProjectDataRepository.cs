@@ -155,7 +155,7 @@ namespace CrdsGoLocalApi.Repositories.ProjectData
         .AddSelectColumn("Note_To_Volunteers_1")
         .AddSelectColumn("Project_Parking_Location")
         .WithFilter($"Initiative_ID = {initiativeId} " +
-        $"            && Project_Status_ID IN ({ProjectStatusIds.ACTIVE},{ProjectStatusIds.CLOSED_FOR_SIGNUPS})")
+                    $"AND Project_Status_ID IN ({ProjectStatusIds.ACTIVE},{ProjectStatusIds.CLOSED_FOR_SIGNUPS})")
         .RestrictResultCount(0)
         .Build()
         .Search<MpProjectReminder>();

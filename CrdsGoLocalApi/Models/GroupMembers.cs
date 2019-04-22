@@ -27,6 +27,9 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "Mobile_Phone")]
     public string MobilePhone { get; set; }
 
+    [JsonProperty(PropertyName = "Enrolled_By")]
+    public string EnrolledBy { get; set; }
+
     public GoLocalKids KidsAttending { get; set; }
   }
 }
