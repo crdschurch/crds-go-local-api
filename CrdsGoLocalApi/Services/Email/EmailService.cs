@@ -128,7 +128,6 @@ namespace CrdsGoLocalApi.Services.Email
       string leaderInfoHtml = $"{leaderOneInfo} {leaderTwoInfoOrPlaceholder}";
 
       return leaderInfoHtml;
-
     }
 
     private string GetLeaderTwoOrPlaceholder(List<string> leadersInfo) {
