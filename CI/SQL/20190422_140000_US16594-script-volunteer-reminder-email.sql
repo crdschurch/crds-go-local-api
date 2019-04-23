@@ -555,7 +555,7 @@ BEGIN
                                                                                     face="helvetica"> <span
                                                                                     style="font-size: 15px;">
                                                                             <u><b>What''s my project?</b></u><br>
-                                                                            Your project is: [Organization] - [Project_Name]
+                                                                            Your project is: [Organization] - [Project_Name] on [Project_Date] from [Project_Start_Time] to [Project_End_Time].
                                                                             </span>
                                                                             </font></p>
 

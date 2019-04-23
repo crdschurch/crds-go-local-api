@@ -79,7 +79,10 @@ namespace CrdsGoLocalApi.Repositories.Email
           {"Project_Description", emailData.ProjectDescription },
           {"Project_Address", emailData.ProjectAddress},
           {"Project_Parking_Location", emailData.ProjectParkingLocation },
-          {"Project_Leader_Names", emailData.ProjectLeaderNames }
+          {"Project_Leader_Names", emailData.ProjectLeaderNames },
+          {"Project_Date", emailData.ProjectStart.HasValue ? emailData.ProjectStart.Value.ToString("MM/dd/yy") : "" },
+          {"Project_Start_Time", emailData.ProjectStart.HasValue ? emailData.ProjectStart.Value.ToShortTimeString() : ""},
+          {"Project_End_Time", emailData.ProjectEnd.HasValue ? emailData.ProjectEnd.Value.ToShortTimeString() : ""}
         }
       };
       var sent = _emailSender.SendEmail(email, false).Result;

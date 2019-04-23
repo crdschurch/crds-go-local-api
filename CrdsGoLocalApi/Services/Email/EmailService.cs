@@ -111,7 +111,8 @@ namespace CrdsGoLocalApi.Services.Email
                          $"{project.AddressState} {project.AddressZip}",
         ProjectParkingLocation = GetParkingLocationOrDefaultMsg(project.ParkingLocation),
         ProjectLeaderNames = GetProjectLeaderInfoHtmlString(leaders),
-        ProjectDescription = project.ProjectDescription
+        ProjectStart = project.StartDate,
+        ProjectEnd = project.EndDate
       };
       var sent = _emailRepository.SendVolunteerReminderEmail(newEmailData);
       return sent;

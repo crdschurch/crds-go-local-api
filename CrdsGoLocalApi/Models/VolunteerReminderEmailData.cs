@@ -17,6 +17,8 @@ namespace CrdsGoLocalApi.Models
     public string ProjectParkingLocation { get; set; }
     public string ProjectGroupContactFirstName { get; set; }
     public string ProjectGroupContactLastName { get; set; }
+    public DateTime? ProjectStart { get; set; }
+    public DateTime? ProjectEnd { get; set; }
     public int ProjectGroupContactId { get; set; }
     public List<GroupMember> Volunteers { get; set; }
   }
