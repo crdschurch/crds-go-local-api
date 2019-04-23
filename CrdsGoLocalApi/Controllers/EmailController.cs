@@ -76,7 +76,7 @@ namespace CrdsGoLocalApi.Controllers
           }
           catch (Exception ex)
           {
-            _logger.Error(ex, "Error sending project lead emails.");
+            _logger.Error(ex, "Error sending project volunteer emails.");
             return BadRequest();
           }
         });

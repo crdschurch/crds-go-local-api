@@ -111,13 +111,19 @@ namespace CrdsGoLocalApi.Services.Email
                          $"{project.AddressState} {project.AddressZip}",
         ProjectParkingLocation = GetParkingLocationOrDefaultMsg(project.ParkingLocation),
         ProjectLeaderNames = GetProjectLeaderInfoHtmlString(leaders),
-        ProjectDescription = project.ProjectDescription
+        ProjectStart = project.StartDate,
+        ProjectEnd = project.EndDate
       };
       var sent = _emailRepository.SendVolunteerReminderEmail(newEmailData);
       return sent;
     }
 
     private string GetProjectLeaderInfoHtmlString(List<GroupMember> leaders) {
+
+      if (leaders == null || !leaders.Any()) {
+        return "";
+      }
+
       List<string> leaderInfoStrings = leaders
         .Select(l => $"{l.FirstName} {l.LastName} {l.EmailAddress} {l.MobilePhone}")
         .ToList();
