@@ -118,6 +118,11 @@ namespace CrdsGoLocalApi.Services.Email
     }
 
     private string GetProjectLeaderInfoHtmlString(List<GroupMember> leaders) {
+
+      if (leaders == null || !leaders.Any()) {
+        return "";
+      }
+
       List<string> leaderInfoStrings = leaders
         .Select(l => $"{l.FirstName} {l.LastName} {l.EmailAddress} {l.MobilePhone}")
         .ToList();
