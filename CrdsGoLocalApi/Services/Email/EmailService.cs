@@ -101,6 +101,7 @@ namespace CrdsGoLocalApi.Services.Email
     {
       var newEmailData = new VolunteerReminderEmailData
       {
+        ContactIdOfVolEmailIsBeingSentTo = vol.ContactId,
         ProjectName = project.ProjectName,
         Organization = project.OrgName,
         ProjectGroupContactId = group.PrimaryContactId,
@@ -109,7 +110,6 @@ namespace CrdsGoLocalApi.Services.Email
         ProjectAddress = $"{project.Address1} {project.Address2} {project.AddressCity}, " +
                          $"{project.AddressState} {project.AddressZip}",
         ProjectParkingLocation = GetParkingLocationOrDefaultMsg(project.ParkingLocation),
-        ProjectLeaderContactId = vol.ContactId,
         ProjectLeaderNames = GetProjectLeaderInfoHtmlString(leaders),
         ProjectDescription = project.ProjectDescription
       };
@@ -125,7 +125,7 @@ namespace CrdsGoLocalApi.Services.Email
       string leaderOneInfo = leaderInfoStrings.First();
       string leaderTwoInfoOrPlaceholder = GetLeaderTwoOrPlaceholder(leaderInfoStrings);
 
-      string leaderInfoHtml = $"{leaderOneInfo}<br>{leaderTwoInfoOrPlaceholder}";
+      string leaderInfoHtml = $"{leaderOneInfo} {leaderTwoInfoOrPlaceholder}";
 
       return leaderInfoHtml;
 
@@ -134,9 +134,7 @@ namespace CrdsGoLocalApi.Services.Email
     private string GetLeaderTwoOrPlaceholder(List<string> leadersInfo) {
       bool hasMoreThanOneLeader = leadersInfo.Count() > 1;
 
-      string leaderTwoOrPlaceholder = hasMoreThanOneLeader ?
-        leadersInfo[1] :
-        "This is an awesome leader. Can't wait for you to serve together.";
+      string leaderTwoOrPlaceholder = hasMoreThanOneLeader ? $"<br>{leadersInfo[1]}" : "";
 
       return leaderTwoOrPlaceholder;
     }

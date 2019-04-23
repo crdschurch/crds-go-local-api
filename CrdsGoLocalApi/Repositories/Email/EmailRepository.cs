@@ -68,10 +68,10 @@ namespace CrdsGoLocalApi.Repositories.Email
     public bool SendVolunteerReminderEmail(VolunteerReminderEmailData emailData)
     {
       var email = new EmailCommunication{
-        ToContactId = new List<int> { emailData.ProjectGroupContactId },
+        ToContactId = new List<int>() { emailData.ContactIdOfVolEmailIsBeingSentTo },
         FromContactId = emailData.ProjectGroupContactId,
         SenderContactId = emailData.ProjectGroupContactId,
-        TemplateId = MpConstants.ProjectVolunteerReminderTemplate,
+        TemplateId = MpConstants.ProjectVolunteerReminderTemplateId,
         MergeData = new Dictionary<string, object>
         {
           {"Project_Name", emailData.ProjectName },

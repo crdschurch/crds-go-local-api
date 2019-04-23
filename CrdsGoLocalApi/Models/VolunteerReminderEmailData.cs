@@ -7,6 +7,7 @@ namespace CrdsGoLocalApi.Models
 {
   public class VolunteerReminderEmailData
   {
+    public int ContactIdOfVolEmailIsBeingSentTo { get; set; }
     public int ProjectLeaderContactId { get; set; }
     public string ProjectLeaderNames { get; set; }
     public string Organization { get; set; }
