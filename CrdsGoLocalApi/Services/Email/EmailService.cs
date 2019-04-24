@@ -109,6 +109,7 @@ namespace CrdsGoLocalApi.Services.Email
         ProjectGroupContactLastName = group.PrimaryContactLastName,
         ProjectAddress = $"{project.Address1} {project.Address2} {project.AddressCity}, " +
                          $"{project.AddressState} {project.AddressZip}",
+        ProjectDescription = project.ProjectDescription,
         ProjectParkingLocation = GetParkingLocationOrDefaultMsg(project.ParkingLocation),
         ProjectLeaderNames = GetProjectLeaderInfoHtmlString(leaders),
         ProjectStart = project.StartDate,
