@@ -30,7 +30,7 @@ namespace CrdsGoLocalApi.Repositories.GroupData
       return group;
     }
 
-    public List<GroupMembers> GetGroupMembers(int groupId)
+    public List<GroupMember> GetGroupMembers(int groupId)
     {
       var apiToken = _tokenService.GetClientToken();
       var members = _ministryPlatformBuilder.NewRequestBuilder()
@@ -42,9 +42,10 @@ namespace CrdsGoLocalApi.Repositories.GroupData
         .AddSelectColumn("Participant_ID_Table_Contact_ID_Table.[Last_Name] AS [Last_Name]")
         .AddSelectColumn("Participant_ID_Table_Contact_ID_Table.[Email_Address] AS [Email_Address]")
         .AddSelectColumn("Participant_ID_Table_Contact_ID_Table.[Mobile_Phone] AS [Mobile_Phone]")
+        .AddSelectColumn("Enrolled_By")
         .WithFilter($"Group_ID = {groupId} AND (End_Date IS NULL OR End_Date > GETDATE())")
         .Build()
-        .Search<GroupMembers>();
+        .Search<GroupMember>();
       return members;
     }
 

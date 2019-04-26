@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace CrdsGoLocalApi.Models
 {
   [MpRestApiTable(Name = "Group_Participants")]
-  public class GroupMembers
+  public class GroupMember
   {
     [JsonProperty(PropertyName = "Group_Participant_ID")]
     public int GroupParticipantId { get; set; }
@@ -26,6 +26,9 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "Mobile_Phone")]
     public string MobilePhone { get; set; }
+
+    [JsonProperty(PropertyName = "Enrolled_By")]
+    public string EnrolledBy { get; set; }
 
     public GoLocalKids KidsAttending { get; set; }
   }
