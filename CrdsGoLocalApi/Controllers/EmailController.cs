@@ -51,5 +51,36 @@ namespace CrdsGoLocalApi.Controllers
         });
       }
 
+      // GET /api/email/volunteer-reminders
+      [HttpGet]
+      [Route("volunteer-reminders")]
+      public IActionResult SendVolunteerReminderEmails(int initiativeId)
+      {
+        return Authorized(authData =>
+        {
+          try
+          {
+            if (authData.Authorization.MpRoles.ContainsKey(MpConstants.GoLocalEmailRoleId))
+            {
+              if (initiativeId > 0)
+              {
+                var emailsSent = _emailService.SendVolunteersReminderEmails(initiativeId);
+                return Ok($"{emailsSent} emails sent.");
+              }
+              return BadRequest("Invalid or missing Initiative.");
+            }
+            else
+            {
+              return Unauthorized();
+            }
+          }
+          catch (Exception ex)
+          {
+            _logger.Error(ex, "Error sending project volunteer emails.");
+            return BadRequest();
+          }
+        });
+      }
+
     }
 }

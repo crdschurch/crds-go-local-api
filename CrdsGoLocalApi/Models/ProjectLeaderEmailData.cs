@@ -12,6 +12,6 @@ namespace CrdsGoLocalApi.Models
     public string ProjectGroupContactFirstName { get; set; }
     public string ProjectGroupContactLastName { get; set; }
     public int ProjectGroupContactId { get; set; }
-    public List<GroupMembers> Volunteers { get; set; }
+    public List<GroupMember> Volunteers { get; set; }
   }
 }
