@@ -44,7 +44,6 @@ namespace CrdsGoLocalApi.Services.EmailHelper
       return @"<tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Phone</th>
                 <th>Kids Age 2-7</th>
                 <th>Kids Age 8-12</th>
               </tr>";
@@ -54,7 +53,6 @@ namespace CrdsGoLocalApi.Services.EmailHelper
       return $@"<tr>
           <th>{vol.FirstName} {vol.LastName}</th>
           <th>{vol.EmailAddress}</th>
-          <th>{vol.MobilePhone}</th>
           <th>{vol.KidsAttending?.TwoToSeven ?? 0}</th>
           <th>{vol.KidsAttending?.EightToTwelve ?? 0}</th>
         </tr>";
