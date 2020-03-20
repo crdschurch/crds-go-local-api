@@ -83,6 +83,13 @@ namespace CrdsGoLocalApi.Services.Signup
         BirthDate = contactData.DateOfBirth,
         PhoneNumber = contactData.MobilePhone
       };
+
+      var allHouseholdMembers = _householdDataRepository.GetHouseholdMembers(contactData.HouseholdId);
+      var validHouseholdMembers = allHouseholdMembers.Where(FilterHouseholdMembers)
+                                            .Where(fm => fm.ContactId != contact.ContactId)
+                                            .ToList();
+      contact.FamilyMembers = validHouseholdMembers;
+      
       return contact;
     }
 
@@ -278,6 +285,19 @@ namespace CrdsGoLocalApi.Services.Signup
         h.FirstName == guest.FirstName &&
         h.LastName == guest.LastName &&
         h.DateOfBirth?.Date == guest.BirthDate.Date)?.ContactId;
+    }
+
+    private Boolean FilterHouseholdMembers(HouseholdMembers householdMember)
+    {
+        // Head Of Household: 1, MinorChild: 2, Adult Child: 4, Head of Household Spouse: 7
+        int[] householdPositionId = {1, 2, 4, 7};
+        if (!householdMember.DateOfBirth.HasValue) return false;
+        
+        var age = DateTime.Today.Year - householdMember.DateOfBirth.Value.Year;
+        if (householdMember.DateOfBirth?.Date > DateTime.Today.AddYears(-age)) age -= 1;
+
+        // person needs to be 13 or older and either a suppose or a child  
+        return age >= 13 && householdPositionId.Contains(householdMember.HouseholdPosition);
     }
   }
 }

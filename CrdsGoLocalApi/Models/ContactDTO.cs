@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace CrdsGoLocalApi.Models
@@ -22,5 +23,8 @@ namespace CrdsGoLocalApi.Models
 
     [JsonProperty(PropertyName = "dob")]
     public DateTime? BirthDate { get; set; }
+
+    [JsonProperty(PropertyName = "familyMembers")]
+    public List<HouseholdMembers>  FamilyMembers { get; set; }
   }
 }
