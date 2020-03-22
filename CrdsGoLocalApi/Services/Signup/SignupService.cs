@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using CrdsGoLocalApi.Constants;
 using CrdsGoLocalApi.Models;
 using CrdsGoLocalApi.Repositories.ContactData;
@@ -19,18 +20,20 @@ namespace CrdsGoLocalApi.Services.Signup
     private readonly IHouseholdDataRepository _householdDataRepository;
     private readonly IParticipantDataRepository _participantDataRepository;
     private readonly IProjectDataRepository _projectDataRepository;
+    private readonly IMapper _mapper;
 
     private static readonly NLog.Logger _logger = NLog.LogManager.GetCurrentClassLogger();
 
     public SignupService(IContactDataRepository contactData, IEmailRepository emailRepository,
       IHouseholdDataRepository householdData, IParticipantDataRepository participantData,
-      IProjectDataRepository projectData)
+      IProjectDataRepository projectData, IMapper mapper)
     {
       _contactDataRepository = contactData;
       _emailRepository = emailRepository;
       _householdDataRepository = householdData;
       _participantDataRepository = participantData;
       _projectDataRepository = projectData;
+      _mapper = mapper;
     }
 
     public bool SignupUser(VolunteerDTO signupData)
@@ -71,26 +74,21 @@ namespace CrdsGoLocalApi.Services.Signup
       return succeeded;
     }
 
-    public ContactDTO GetContactData(int contactId)
+    public FamilyDTO GetVolunteerData(int contactId)
     {
       var contactData = _contactDataRepository.GetContact(contactId);
-      var contact = new ContactDTO
-      {
-        ContactId = contactData.ContactId,
-        FirstName = contactData.FirstName,
-        LastName = contactData.LastName,
-        Email = contactData.EmailAddress,
-        BirthDate = contactData.DateOfBirth,
-        PhoneNumber = contactData.MobilePhone
-      };
 
       var allHouseholdMembers = _householdDataRepository.GetHouseholdMembers(contactData.HouseholdId);
       var validHouseholdMembers = allHouseholdMembers.Where(FilterHouseholdMembers)
-                                            .Where(fm => fm.ContactId != contact.ContactId)
+                                            .Where(fm => fm.ContactId != contactData.ContactId)
                                             .ToList();
-      contact.FamilyMembers = validHouseholdMembers;
-      
-      return contact;
+      var familyData = new FamilyDTO
+      {
+        MainVolunteer = _mapper.Map<Contact, ContactDTO>(contactData),
+        FamilyMembers = _mapper.Map<List<Contact>, List<ContactDTO>>(validHouseholdMembers)
+      };
+
+      return familyData;
     }
 
     public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber,
@@ -287,7 +285,7 @@ namespace CrdsGoLocalApi.Services.Signup
         h.DateOfBirth?.Date == guest.BirthDate.Date)?.ContactId;
     }
 
-    private Boolean FilterHouseholdMembers(HouseholdMembers householdMember)
+    private Boolean FilterHouseholdMembers(Contact householdMember)
     {
         // Head Of Household: 1, MinorChild: 2, Adult Child: 4, Head of Household Spouse: 7
         int[] householdPositionId = {1, 2, 4, 7};

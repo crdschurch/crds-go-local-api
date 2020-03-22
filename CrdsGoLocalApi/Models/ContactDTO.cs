@@ -24,7 +24,10 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "dob")]
     public DateTime? BirthDate { get; set; }
 
-    [JsonProperty(PropertyName = "familyMembers")]
-    public List<HouseholdMembers>  FamilyMembers { get; set; }
+    [JsonProperty(PropertyName = "householdPositionId")]
+    public int HouseholdPosition { get; set; }
+    
+    [JsonProperty(PropertyName = "displayName")]
+    public string DisplayName { get; set; }
   }
 }
