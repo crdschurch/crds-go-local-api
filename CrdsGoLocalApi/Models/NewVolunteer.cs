@@ -8,6 +8,6 @@ namespace CrdsGoLocalApi.Models
     public int HouseholdId { get; set; }
     public int ParticipantId { get; set; }
     public int GroupParticipantId { get; set; }
-    public List<HouseholdMembers> FamilyMembers { get; set; }
+    public List<ContactDTO> FamilyMembers { get; set; }
   }
 }

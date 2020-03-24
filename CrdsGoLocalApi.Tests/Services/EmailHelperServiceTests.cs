@@ -20,7 +20,7 @@ namespace CrdsGoLocalApi.Tests.Services
       VolunteerDTO volunteerData = new VolunteerDTO();
       volunteerData.FirstName = "Leeroy";
       volunteerData.LastName = "Jenkins";
-      volunteerData.Guests = new List<GuestContact>();
+      volunteerData.FamilyMembers = new List<ContactDTO>();
 
       string actual = _fixture.CreateStyledAttendeeList(volunteerData);
       string expected =  "<div style=\"margin-left: 40px\">Leeroy Jenkins</div>";
@@ -34,9 +34,9 @@ namespace CrdsGoLocalApi.Tests.Services
       VolunteerDTO volunteerData = new VolunteerDTO();
       volunteerData.FirstName = "Leeroy";
       volunteerData.LastName = "Jenkins";
-      volunteerData.Guests = new List<GuestContact>();
-      volunteerData.Guests.Add(new GuestContact { FirstName = "Angie", LastName = "Wobey" });
-      volunteerData.Guests.Add(new GuestContact { FirstName = "Mandy", LastName = "Bagelberry"  });
+      volunteerData.FamilyMembers = new List<ContactDTO>();
+      volunteerData.FamilyMembers.Add(new ContactDTO { FirstName = "Angie", LastName = "Wobey" });
+      volunteerData.FamilyMembers.Add(new ContactDTO { FirstName = "Mandy", LastName = "Bagelberry"  });
 
       string actual = _fixture.CreateStyledAttendeeList(volunteerData);
       string expected =  

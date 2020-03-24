@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
@@ -42,28 +42,25 @@ namespace CrdsGoLocalApi.Services.Signup
       try
       {
         var project = _projectDataRepository.GetProject(signupData.ProjectId);
-        var mainVolunteer = SignupVolunteer(signupData.FirstName, signupData.LastName, signupData.Email,
-          signupData.PhoneNumber, signupData.BirthDate, project, null, null, signupData.ContactId);
-        var goLocalKidsId = CreateGoLocalKids(mainVolunteer.GroupParticipantId, signupData.KidsTwoToSevenCount,
+        var groupParticipantId = SignupVolunteer( project, signupData.ContactId, null);
+        var goLocalKidsId = CreateGoLocalKids(groupParticipantId, signupData.KidsTwoToSevenCount,
           signupData.KidsEightToTwelveCount);
 
-        if (signupData.Guests?.Count > 0)
+        if (signupData.FamilyMembers?.Count > 0)
         {
           _logger.Info("Signing up guests...");
           try
           {
-            foreach (var guest in signupData.Guests)
+            foreach (var member in signupData.FamilyMembers)
             {
-              var guestContactId = CheckIfGuestIsInHousehold(guest, mainVolunteer.FamilyMembers);
-              SignupVolunteer(guest.FirstName, guest.LastName, guest.Email, null, guest.BirthDate, project, mainVolunteer,
-                guest.HouseholdPositionId, guestContactId);
+              SignupVolunteer(project, member.ContactId, groupParticipantId);
             }
           }
           catch (Exception exc) {
             _logger.Error("Failed to sign up guests");
           }
         }
-        succeeded = _emailRepository.SendConfirmationEmail(project, signupData, mainVolunteer.ContactId);
+        succeeded = _emailRepository.SendConfirmationEmail(project, signupData, signupData.ContactId);
       }
       catch (Exception ex)
       {
@@ -91,45 +88,15 @@ namespace CrdsGoLocalApi.Services.Signup
       return familyData;
     }
 
-    public NewVolunteer SignupVolunteer(string firstName, string lastName, string email, string phoneNumber,
-      DateTime birthDate, MpProject project, NewVolunteer mainVolunteer = null, int? householdPostionId = null,
-      int? contactId = null)
+    public int SignupVolunteer( MpProject project, int contactId, int? enrolledByGroupParticipant = null)
     {
       _logger.Info("Attempting to sign up volunteer...");
       try {
-      var newVol = new NewVolunteer();
-      if (contactId == null)
-      {
-        if (householdPostionId.HasValue && mainVolunteer?.HouseholdId > 0)
-        {
-          newVol.HouseholdId = mainVolunteer.HouseholdId;
-        }
-        else
-        {
-          newVol.HouseholdId = CreateHousehold(lastName);
-        }
-        newVol.ContactId = CreateContact(firstName,
-          lastName,
-          email,
-          phoneNumber,
-          birthDate,
-          newVol.HouseholdId,
-          householdPostionId);
-        newVol.ParticipantId = CreateParticipant(newVol.ContactId);
-        newVol.FamilyMembers = new List<HouseholdMembers>();
-      }
-      else
-      {
-        newVol.ContactId = mainVolunteer == null ? UpdateContact(contactId.Value, birthDate, phoneNumber) : contactId.Value;
-        newVol.HouseholdId = GetHouseholdId(newVol.ContactId);
-        newVol.FamilyMembers = _householdDataRepository.GetHouseholdMembers(newVol.HouseholdId);
-        newVol.ParticipantId = GetParticipantId(newVol.ContactId);
-      }
-
-      newVol.GroupParticipantId =
-        CreateGroupParticipant(newVol.ParticipantId, project.GroupId, mainVolunteer?.GroupParticipantId);
-      var eventParticipantId = CreateEventParticipant(newVol.ParticipantId, newVol.GroupParticipantId, project.EventId);
-      return newVol;
+        var participantId = GetParticipantId(contactId);
+        var groupParticipantId =
+          CreateGroupParticipant(participantId, project.GroupId, enrolledByGroupParticipant);
+        CreateEventParticipant(participantId, groupParticipantId, project.EventId);
+        return groupParticipantId;
       }
       catch (Exception exc) {
         _logger.Error($"Failed to signup volunteer, exc: {exc}");

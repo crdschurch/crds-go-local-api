@@ -8,7 +8,7 @@ namespace CrdsGoLocalApi.Services.EmailHelper
   {
     public string CreateStyledAttendeeList(VolunteerDTO volunteerData)
     {
-      List<string> attendeeNames = volunteerData.Guests.Select(g => $"{g.FirstName} {g.LastName}").ToList();
+      List<string> attendeeNames = volunteerData.FamilyMembers.Select(g => $"{g.FirstName} {g.LastName}").ToList();
       attendeeNames.Insert(0, $"{volunteerData.FirstName} {volunteerData.LastName}");
 
       string styledAttendeeList =
