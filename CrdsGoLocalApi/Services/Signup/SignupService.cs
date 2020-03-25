@@ -113,42 +113,6 @@ namespace CrdsGoLocalApi.Services.Signup
       return household.HouseholdId;
     }
 
-    public int CreateContact(string firstName, string lastName, string email, string phoneNumber,
-      DateTime birthday, int householdId, int? householdPositionId)
-    {
-      var contact = new Contact
-      {
-        Company = false,
-        ContactStatusId = MpConstants.ActiveContactStatus,
-        FirstName = firstName,
-        DisplayName = $"{lastName}, {firstName}",
-        LastName = lastName,
-        EmailAddress = email,
-        MobilePhone = phoneNumber,
-        DateOfBirth = birthday,
-        HouseholdId = householdId,
-        HouseholdPosition = householdPositionId ?? MpConstants.HeadOfHousehold
-      };
-
-      contact.ContactId = _contactDataRepository.CreateContact(contact);
-
-      return contact.ContactId;
-    }
-
-    public int CreateParticipant(int contactId)
-    {
-      var participant = new Participant
-      {
-        ContactId = contactId,
-        ParticipantStartDate = DateTime.Now,
-        ParticipantTypeId = MpConstants.TempParticipantTypeId
-      };
-
-      participant.ParticipantId = _participantDataRepository.CreateParticipant(participant);
-
-      return participant.ParticipantId;
-    }
-
     public int CreateGroupParticipant(int participantId, int? groupId, int? enrolledByGroupParticipant)
     {
       if (groupId.HasValue)
@@ -236,20 +200,6 @@ namespace CrdsGoLocalApi.Services.Signup
     {
       var participantId = _participantDataRepository.GetParticipantId(contactId);
       return participantId;
-    }
-
-    public int GetHouseholdId(int contactId)
-    {
-      var householdId = _householdDataRepository.GetHouseholdId(contactId);
-      return householdId;
-    }
-
-    public int? CheckIfGuestIsInHousehold(GuestContact guest, List<HouseholdMembers> household)
-    {
-      return household.FirstOrDefault(h =>
-        h.FirstName == guest.FirstName &&
-        h.LastName == guest.LastName &&
-        h.DateOfBirth?.Date == guest.BirthDate.Date)?.ContactId;
     }
 
     private Boolean FilterHouseholdMembers(Contact householdMember)
