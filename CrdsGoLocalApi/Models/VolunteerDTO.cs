@@ -7,7 +7,7 @@ namespace CrdsGoLocalApi.Models
   public class VolunteerDTO
   {
     [JsonProperty(PropertyName = "contactId")]
-    public int? ContactId { get; set; }
+    public int ContactId { get; set; }
 
     [JsonProperty(PropertyName = "firstName")]
     public string FirstName { get; set; }
@@ -33,7 +33,7 @@ namespace CrdsGoLocalApi.Models
     [JsonProperty(PropertyName = "countOfKidsBetweenEightAndTwelve")]
     public int KidsEightToTwelveCount { get; set; }
 
-    [JsonProperty(PropertyName = "guests")]
-    public List<GuestContact> Guests { get; set; }
+    [JsonProperty(PropertyName = "familyMembers")]
+    public List<ContactDTO> FamilyMembers { get; set; }
   }
 }

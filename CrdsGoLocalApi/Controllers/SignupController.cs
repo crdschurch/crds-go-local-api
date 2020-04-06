@@ -56,8 +56,8 @@ namespace CrdsGoLocalApi.Controllers
         try
         {
           _logger.Info($"Looking up Contact data for {authData.UserInfo.Mp.ContactId}");
-          var contact = _signupService.GetContactData(authData.UserInfo.Mp.ContactId);
-          return Ok(contact);
+          var familyData = _signupService.GetVolunteerData(authData.UserInfo.Mp.ContactId);
+          return Ok(familyData);
         }
         catch (Exception ex)
         {

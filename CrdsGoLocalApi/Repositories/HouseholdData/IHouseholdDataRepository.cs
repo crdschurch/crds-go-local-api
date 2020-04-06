@@ -7,6 +7,6 @@ namespace CrdsGoLocalApi.Repositories.HouseholdData
   {
     int CreateHousehold(Household householdData);
     int GetHouseholdId(int contactId);
-    List<HouseholdMembers> GetHouseholdMembers(int householdId);
+    List<Contact> GetHouseholdMembers(int householdId);
   }
 }

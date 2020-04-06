@@ -5,6 +5,9 @@ namespace CrdsGoLocalApi.Models
 {
   public class GuestContact
   {
+    [JsonProperty(PropertyName = "contactId")]
+    public int ContactId { get; set; }
+    
     [JsonProperty(PropertyName = "firstName")]
     public string FirstName { get; set; }
 
