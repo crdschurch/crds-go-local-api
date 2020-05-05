@@ -38,14 +38,14 @@ namespace CrdsGoLocalApi.Repositories.HouseholdData
       return household["Household_ID"].ToObject<int>();
     }
 
-    public List<HouseholdMembers> GetHouseholdMembers(int householdId)
+    public List<Contact> GetHouseholdMembers(int householdId)
     {
       var apiToken = _tokenService.GetClientToken();
       var householdMembers = _ministryPlatformBuilder.NewRequestBuilder()
         .WithAuthenticationToken(apiToken)
         .WithFilter($"Household_ID = {householdId}")
         .Build()
-        .Search<HouseholdMembers>();
+        .Search<Contact>();
       return householdMembers;
     }
   }

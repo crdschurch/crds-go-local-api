@@ -1,4 +1,5 @@
-﻿using CrdsGoLocalApi.Middleware;
+﻿using AutoMapper;
+using CrdsGoLocalApi.Middleware;
 using CrdsGoLocalApi.Repositories.ContactData;
 using CrdsGoLocalApi.Repositories.Email;
 using CrdsGoLocalApi.Repositories.GroupData;
@@ -39,6 +40,7 @@ namespace CrdsGoLocalApi
       services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
       services.AddCors();
 
+      services.AddAutoMapper(typeof(Startup));
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new Info { Title = "GO Local API", Version = "v1" });

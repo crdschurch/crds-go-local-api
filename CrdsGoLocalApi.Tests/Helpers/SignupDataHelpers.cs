@@ -16,7 +16,8 @@ namespace CrdsGoLocalApi.Tests.Helpers
         BirthDate = new DateTime(1901, 01, 01),
         KidsTwoToSevenCount = 1,
         KidsEightToTwelveCount = 2,
-        ProjectId = 9876
+        ProjectId = 9876,
+        ContactId = 1234
       };
     }
 
@@ -29,7 +30,8 @@ namespace CrdsGoLocalApi.Tests.Helpers
         Email = "fred.flintstone@crossroads.net",
         PhoneNumber = "123-456-7890",
         BirthDate = new DateTime(1901, 01, 01),
-        ProjectId = 9876
+        ProjectId = 9876,
+        ContactId = 1234
       };
     }
 

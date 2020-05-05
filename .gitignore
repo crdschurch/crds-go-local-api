@@ -240,3 +240,6 @@ _Pvt_Extensions
 
 
 wwwroot/js/simplefred.min.js
+
+# idea folder
+.idea
