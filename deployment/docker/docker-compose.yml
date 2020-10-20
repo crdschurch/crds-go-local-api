@@ -21,4 +21,4 @@ services:
       - MP_OAUTH_BASE_URL=${MP_OAUTH_BASE_URL:-https://adminint.crossroads.net/ministryplatformapi/oauth} 
       - API_USER=${API_USER}
       - API_PASSWORD=${API_PASSWORD}
-      - ASTRONOMER_APPLICATION_ID=${ASTRONOMER_APPLICATION_ID}
+      - METAROUTER_APPLICATION_ID=${METAROUTER_APPLICATION_ID}
